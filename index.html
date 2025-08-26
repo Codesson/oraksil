@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>갤러그 게임</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #000;
+            color: #fff;
+            font-family: 'Courier New', monospace;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        #gameCanvas {
+            border: 2px solid #0ff;
+            background: linear-gradient(180deg, #000428 0%, #004e92 100%);
+            box-shadow: 0 0 20px #0ff;
+        }
+
+        .game-ui {
+            margin-top: 20px;
+            display: flex;
+            gap: 30px;
+            font-size: 18px;
+            color: #0ff;
+            text-shadow: 0 0 5px #0ff;
+        }
+
+        .controls {
+            margin-top: 15px;
+            text-align: center;
+            color: #888;
+            font-size: 14px;
+        }
+
+        h1 {
+            color: #0ff;
+            text-shadow: 0 0 10px #0ff;
+            margin-bottom: 20px;
+            font-size: 32px;
+        }
+
+        .game-over {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.9);
+            padding: 30px;
+            border: 2px solid #0ff;
+            border-radius: 10px;
+            text-align: center;
+            display: none;
+            z-index: 100;
+        }
+
+        .restart-btn {
+            background: #0ff;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            margin-top: 15px;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .restart-btn:hover {
+            background: #fff;
+            transform: scale(1.05);
+            transition: all 0.2s ease;
+        }
+        
+        .pulsing {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+        
+        .game-ui div {
+            background: rgba(0, 255, 255, 0.1);
+            padding: 8px 15px;
+            border-radius: 5px;
+            border: 1px solid rgba(0, 255, 255, 0.3);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #888;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 20px;
+            color: #0ff;
+            font-weight: bold;
+        }
+
+        .records-btn {
+            background: #ff8844;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            margin-top: 10px;
+            margin-left: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .records-btn:hover {
+            background: #ffaa66;
+            transform: scale(1.05);
+            transition: all 0.2s ease;
+        }
+
+        .records-screen {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.9);
+            padding: 30px;
+            border: 2px solid #0ff;
+            border-radius: 10px;
+            text-align: left;
+            display: none;
+            z-index: 100;
+            max-width: 700px;
+            min-width: 600px;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .records-content {
+            margin: 20px 0;
+        }
+
+        .records-section {
+            margin-bottom: 20px;
+        }
+
+        .records-section h3 {
+            color: #0ff;
+            border-bottom: 1px solid #0ff;
+            padding-bottom: 5px;
+            margin-bottom: 10px;
+        }
+
+        .record-item {
+            background: rgba(0, 255, 255, 0.1);
+            padding: 8px 12px;
+            margin: 5px 0;
+            border-radius: 5px;
+            border-left: 3px solid #0ff;
+        }
+
+        .close-btn {
+            background: #666;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .close-btn:hover {
+            background: #888;
+        }
+
+        .stage-display {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.9);
+            padding: 40px;
+            border: 3px solid #0ff;
+            border-radius: 15px;
+            text-align: center;
+            display: none;
+            z-index: 200;
+            color: #0ff;
+            font-size: 36px;
+            font-weight: bold;
+            text-shadow: 0 0 20px #0ff;
+            box-shadow: 0 0 30px #0ff;
+        }
+
+        .stage-number {
+            font-size: 72px;
+            margin: 20px 0;
+            color: #fff;
+            text-shadow: 0 0 30px #0ff;
+        }
+
+        .name-input-section {
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .name-input-section label {
+            display: block;
+            margin-bottom: 8px;
+            color: #0ff;
+            font-size: 14px;
+        }
+
+        .name-input-section input {
+            background: rgba(0, 255, 255, 0.1);
+            border: 2px solid #0ff;
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 16px;
+            width: 200px;
+        }
+
+        .name-input-section input:focus {
+            outline: none;
+            box-shadow: 0 0 10px #0ff;
+        }
+
+        .save-btn {
+            background: #44ff44;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            margin-right: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .save-btn:hover {
+            background: #66ff66;
+            transform: scale(1.05);
+            transition: all 0.2s ease;
+        }
+
+        .clear-btn {
+            background: #ff4444;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            margin-left: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .clear-btn:hover {
+            background: #ff6666;
+        }
+
+        .ranking-item {
+            background: rgba(0, 255, 255, 0.1);
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 5px;
+            border-left: 4px solid #0ff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .ranking-item.rank-1 {
+            border-left-color: #ffd700;
+            background: rgba(255, 215, 0, 0.1);
+        }
+
+        .ranking-item.rank-2 {
+            border-left-color: #c0c0c0;
+            background: rgba(192, 192, 192, 0.1);
+        }
+
+        .ranking-item.rank-3 {
+            border-left-color: #cd7f32;
+            background: rgba(205, 127, 50, 0.1);
+        }
+
+        .ranking-rank {
+            font-weight: bold;
+            font-size: 18px;
+            color: #0ff;
+            min-width: 30px;
+        }
+
+        .ranking-info {
+            flex: 1;
+            margin: 0 15px;
+        }
+
+        .ranking-name {
+            font-weight: bold;
+            color: #fff;
+            font-size: 16px;
+        }
+
+        .ranking-details {
+            font-size: 12px;
+            color: #888;
+            margin-top: 2px;
+        }
+
+        .ranking-score {
+            font-weight: bold;
+            font-size: 18px;
+            color: #0ff;
+        }
+
+        .start-screen {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.9);
+            padding: 40px;
+            border: 2px solid #0ff;
+            border-radius: 10px;
+            text-align: center;
+            z-index: 100;
+        }
+
+        .start-btn {
+            background: #0ff;
+            color: #000;
+            border: none;
+            padding: 15px 30px;
+            margin-top: 20px;
+            cursor: pointer;
+            font-size: 18px;
+            border-radius: 5px;
+            font-weight: bold;
+            width: 150px;
+            height: 55px;
+        }
+
+        .start-btn:hover {
+            background: #fff;
+        }
+
+        .start-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            align-items: flex-end;
+        }
+
+        .view-records-btn {
+            background: #ff8844;
+            color: #000;
+            border: none;
+            padding: 15px 30px;
+            cursor: pointer;
+            font-size: 18px;
+            border-radius: 5px;
+            font-weight: bold;
+            width: 150px;
+            height: 55px;
+        }
+
+        .view-records-btn:hover {
+            background: #ffaa66;
+        }
+    </style>
+</head>
+<body>
+    <h1>🚀 갤러그 게임 🛸</h1>
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
+    
+
+    
+    <div class="controls">
+        화살표 키로 이동 | 스페이스바로 발사 | R키로 재시작
+    </div>
+
+    <div class="start-screen" id="startScreen">
+        <h2>🛸 갤러그 게임 🛸</h2>
+        <p>적 우주선을 모두 격파하세요!</p>
+        <p>화살표 키로 이동, 스페이스바로 발사</p>
+        <div class="start-buttons">
+            <button class="start-btn" onclick="game.start()">게임 시작</button>
+            <button class="view-records-btn" onclick="game.showRecords()">기록 보기</button>
+        </div>
+    </div>
+
+    <div class="game-over" id="gameOver">
+        <h2>게임 오버!</h2>
+        <div id="newRecord" style="display: none; color: #ffff44; margin-bottom: 10px;">
+            🎉 새로운 최고 기록! 🎉
+        </div>
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-label">최종 점수</div>
+                <div class="stat-value" id="finalScore">0</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">플레이 시간</div>
+                <div class="stat-value"><span id="gameTime">0</span>초</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">처치한 적</div>
+                <div class="stat-value" id="enemiesKilled">0</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">명중률</div>
+                <div class="stat-value"><span id="accuracy">0</span>%</div>
+            </div>
+        </div>
+        
+        <div class="name-input-section">
+            <label for="playerName">이름을 입력하세요:</label>
+            <input type="text" id="playerName" placeholder="플레이어 이름" maxlength="10" onkeypress="if(event.key==='Enter') game.saveGameWithName()">
+        </div>
+        
+        <button class="save-btn" onclick="game.saveGameWithName()">기록 저장</button>
+        <button class="restart-btn" onclick="game.restart()">다시 시작</button>
+        <button class="records-btn" onclick="game.showRecords()">랭킹 보기</button>
+    </div>
+    
+    <div class="records-screen" id="recordsScreen">
+        <h2>🏆 랭킹 보드 🏆</h2>
+        <div class="records-content">
+            <div class="records-section">
+                <h3>🥇 TOP 10 랭킹</h3>
+                <div id="rankingList"></div>
+            </div>
+            <div class="records-section">
+                <h3>📊 전체 통계</h3>
+                <div id="overallRecords"></div>
+            </div>
+        </div>
+        <button class="close-btn" onclick="game.hideRecords()">닫기</button>
+        <button class="clear-btn" onclick="game.clearRecords()">기록 초기화</button>
+    </div>
+
+    <div class="stage-display" id="stageDisplay">
+        <div>🛸 STAGE 🛸</div>
+        <div class="stage-number" id="stageNumber">1</div>
+        <div>Ready?</div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
