@@ -49,11 +49,23 @@ const galagaTranslations = {
         stageLabel: "STAGE",
         
         // Stage display
-        stageNumber: "스테이지",
+        stageNumber: "🛸 스테이지 🛸",
+        stageReady: "준비!",
         
         // Game messages
         enterNamePlaceholder: "이름을 입력하세요",
-        nameRequired: "이름을 입력해주세요!"
+        nameRequired: "이름을 입력해주세요!",
+        
+        // Records screen dynamic content
+        noRecords: "기록이 없습니다",
+        rank: "순위",
+        name: "이름", 
+        score: "점수",
+        stage: "스테이지",
+        accuracy: "명중률",
+        time: "시간",
+        minutes: "분",
+        seconds: "초"
     },
     en: {
         // Header
@@ -102,11 +114,23 @@ const galagaTranslations = {
         stageLabel: "STAGE",
         
         // Stage display
-        stageNumber: "Stage",
+        stageNumber: "🛸 STAGE 🛸",
+        stageReady: "Ready!",
         
         // Game messages
         enterNamePlaceholder: "Enter your name",
-        nameRequired: "Please enter your name!"
+        nameRequired: "Please enter your name!",
+        
+        // Records screen dynamic content
+        noRecords: "No records available",
+        rank: "Rank",
+        name: "Name",
+        score: "Score", 
+        stage: "Stage",
+        accuracy: "Accuracy",
+        time: "Time",
+        minutes: "min",
+        seconds: "sec"
     }
 };
 
@@ -915,7 +939,10 @@ class Game {
         // 랭킹 리스트 표시
         const rankingList = document.getElementById('rankingList');
         if (!this.records.rankings || this.records.rankings.length === 0) {
-            rankingList.innerHTML = '<div class="record-item">아직 랭킹 기록이 없습니다.<br>게임을 플레이하고 이름을 등록해보세요!</div>';
+            const noRecordsMessage = currentGameLanguage === 'ko' 
+                ? '아직 랭킹 기록이 없습니다.<br>게임을 플레이하고 이름을 등록해보세요!'
+                : 'No ranking records yet.<br>Play the game and register your name!';
+            rankingList.innerHTML = `<div class="record-item">${noRecordsMessage}</div>`;
         } else {
             rankingList.innerHTML = this.records.rankings
                 .slice(0, 10) // TOP 10만 표시
@@ -924,13 +951,17 @@ class Game {
                     const rankClass = rank <= 3 ? `rank-${rank}` : '';
                     const rankEmoji = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : '';
                     
+                    const detailsText = currentGameLanguage === 'ko'
+                        ? `${gt('stage')} ${record.level} | 적 ${record.enemiesKilled}마리 | ${gt('accuracy')} ${record.accuracy}% | ${record.date}`
+                        : `${gt('stage')} ${record.level} | ${record.enemiesKilled} enemies | ${gt('accuracy')} ${record.accuracy}% | ${record.date}`;
+                    
                     return `
                         <div class="ranking-item ${rankClass}">
                             <div class="ranking-rank">${rankEmoji}${rank}</div>
                             <div class="ranking-info">
                                 <div class="ranking-name">${record.name}</div>
                                 <div class="ranking-details">
-                                    스테이지 ${record.level} | 적 ${record.enemiesKilled}마리 | 명중률 ${record.accuracy}% | ${record.date}
+                                    ${detailsText}
                                 </div>
                             </div>
                             <div class="ranking-score">${record.score.toLocaleString()}</div>
@@ -941,30 +972,60 @@ class Game {
         
         // 전체 기록 표시
         const overallRecords = document.getElementById('overallRecords');
-        overallRecords.innerHTML = `
-            <div class="record-item">
-                <strong>최고 점수:</strong> ${this.records.highScore.toLocaleString()}점
-            </div>
-            <div class="record-item">
-                <strong>등록된 플레이어:</strong> ${this.records.rankings.length}명
-            </div>
-            <div class="record-item">
-                <strong>플레이한 게임:</strong> ${this.records.totalGamesPlayed}회
-            </div>
-            <div class="record-item">
-                <strong>총 플레이 시간:</strong> ${Math.floor(this.records.totalTimePlayed / 60)}분 ${Math.floor(this.records.totalTimePlayed % 60)}초
-            </div>
-            <div class="record-item">
-                <strong>최고 명중률:</strong> ${this.records.bestAccuracy}%
-            </div>
-            <div class="record-item">
-                <strong>최다 적 처치:</strong> ${this.records.mostEnemiesKilled}마리
-            </div>
-        `;
+        const totalMinutes = Math.floor(this.records.totalTimePlayed / 60);
+        const totalSeconds = Math.floor(this.records.totalTimePlayed % 60);
+        
+        if (currentGameLanguage === 'ko') {
+            overallRecords.innerHTML = `
+                <div class="record-item">
+                    <strong>${gt('bestScore')}:</strong> ${this.records.highScore.toLocaleString()}점
+                </div>
+                <div class="record-item">
+                    <strong>등록된 플레이어:</strong> ${this.records.rankings.length}명
+                </div>
+                <div class="record-item">
+                    <strong>${gt('gamesPlayed')}:</strong> ${this.records.totalGamesPlayed}회
+                </div>
+                <div class="record-item">
+                    <strong>${gt('totalTime')}:</strong> ${totalMinutes}${gt('minutes')} ${totalSeconds}${gt('seconds')}
+                </div>
+                <div class="record-item">
+                    <strong>최고 ${gt('accuracy')}:</strong> ${this.records.bestAccuracy}%
+                </div>
+                <div class="record-item">
+                    <strong>최다 적 처치:</strong> ${this.records.mostEnemiesKilled}마리
+                </div>
+            `;
+        } else {
+            overallRecords.innerHTML = `
+                <div class="record-item">
+                    <strong>${gt('bestScore')}:</strong> ${this.records.highScore.toLocaleString()} pts
+                </div>
+                <div class="record-item">
+                    <strong>Registered Players:</strong> ${this.records.rankings.length}
+                </div>
+                <div class="record-item">
+                    <strong>${gt('gamesPlayed')}:</strong> ${this.records.totalGamesPlayed}
+                </div>
+                <div class="record-item">
+                    <strong>${gt('totalTime')}:</strong> ${totalMinutes}${gt('minutes')} ${totalSeconds}${gt('seconds')}
+                </div>
+                <div class="record-item">
+                    <strong>Best ${gt('accuracy')}:</strong> ${this.records.bestAccuracy}%
+                </div>
+                <div class="record-item">
+                    <strong>Most Enemies Killed:</strong> ${this.records.mostEnemiesKilled}
+                </div>
+            `;
+        }
     }
     
     clearRecords() {
-        if (confirm('정말로 모든 기록을 삭제하시겠습니까?')) {
+        const confirmMessage = currentGameLanguage === 'ko' 
+            ? '정말로 모든 기록을 삭제하시겠습니까?'
+            : 'Are you sure you want to delete all records?';
+        
+        if (confirm(confirmMessage)) {
             this.records = {
                 highScore: 0,
                 totalGamesPlayed: 0,
@@ -1058,11 +1119,11 @@ class Game {
         this.ctx.fillStyle = '#0ff';
         this.ctx.shadowColor = '#0ff';
         this.ctx.shadowBlur = 10;
-        this.ctx.fillText(`SCORE: ${this.score.toLocaleString()}`, 20, 35);
+        this.ctx.fillText(`${gt('scoreLabel')}: ${this.score.toLocaleString()}`, 20, 35);
         
         // 스테이지 표시 (오른쪽 상단)
         this.ctx.textAlign = 'right';
-        this.ctx.fillText(`STAGE: ${this.level}`, this.width - 20, 35);
+        this.ctx.fillText(`${gt('stageLabel')}: ${this.level}`, this.width - 20, 35);
         
         // 생명 표시 (왼쪽 하단에 비행기 아이콘들)
         this.drawLives();

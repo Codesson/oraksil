@@ -873,25 +873,25 @@
     </div>
     
     <div class="records-screen" id="recordsScreen">
-        <h2>🏆 랭킹 보드 🏆</h2>
+        <h2 data-i18n="recordsTitle">🏆 랭킹 보드 🏆</h2>
         <div class="records-content">
             <div class="records-section">
-                <h3>🥇 TOP 10 랭킹</h3>
+                <h3 data-i18n="topRankings">🥇 TOP 10 랭킹</h3>
                 <div id="rankingList"></div>
             </div>
             <div class="records-section">
-                <h3>📊 전체 통계</h3>
+                <h3 data-i18n="overallStats">📊 전체 통계</h3>
                 <div id="overallRecords"></div>
             </div>
         </div>
-        <button class="close-btn" onclick="game.hideRecords()">닫기</button>
-        <button class="clear-btn" onclick="game.clearRecords()">기록 초기화</button>
+        <button class="close-btn" onclick="game.hideRecords()" data-i18n="closeButton">닫기</button>
+        <button class="clear-btn" onclick="game.clearRecords()" data-i18n="clearRecordsButton">기록 초기화</button>
     </div>
 
     <div class="stage-display" id="stageDisplay">
-        <div>🛸 STAGE 🛸</div>
+        <div data-i18n="stageNumber">🛸 스테이지 🛸</div>
         <div class="stage-number" id="stageNumber">1</div>
-        <div>Ready?</div>
+        <div data-i18n="stageReady">준비!</div>
     </div>
 
     <script src="game.js"></script>
