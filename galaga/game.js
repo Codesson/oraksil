@@ -493,6 +493,15 @@ class Game {
         this.gameStats.startTime = Date.now();
         this.gameStats.totalEnemiesKilled = 0;
         this.gameStats.totalShots = 0;
+        
+        // Track game start event
+        if (typeof gtag !== 'undefined') {
+            gtag('event', 'game_start', {
+                'game_name': 'galaga',
+                'language': currentGameLanguage || 'ko'
+            });
+        }
+        
         this.showStageDisplay();
     }
     
@@ -788,6 +797,19 @@ class Game {
         const gameTime = (Date.now() - this.gameStats.startTime) / 1000; // 초 단위
         const accuracy = this.gameStats.totalShots > 0 ? 
             Math.round((this.gameStats.totalEnemiesKilled / this.gameStats.totalShots) * 100) : 0;
+        
+        // Track game over event
+        if (typeof gtag !== 'undefined') {
+            gtag('event', 'game_over', {
+                'game_name': 'galaga',
+                'score': this.score,
+                'level': this.level,
+                'game_time': Math.round(gameTime),
+                'enemies_killed': this.gameStats.totalEnemiesKilled,
+                'accuracy': accuracy,
+                'language': currentGameLanguage || 'ko'
+            });
+        }
         
         // 현재 게임 결과 저장 (이름 입력 전)
         this.currentGameResult = {

@@ -365,6 +365,14 @@ class ArkanoidGame {
         this.level = 1;
         this.totalBricksDestroyed = 0;
         
+        // Track game start event
+        if (typeof gtag !== 'undefined') {
+            gtag('event', 'game_start', {
+                'game_name': 'arkanoid',
+                'language': currentArkanoidLanguage || 'ko'
+            });
+        }
+        
         this.initializeGame();
     }
     
@@ -455,6 +463,17 @@ class ArkanoidGame {
     
     gameOver() {
         this.gameState = 'gameOver';
+        
+        // Track game over event
+        if (typeof gtag !== 'undefined') {
+            gtag('event', 'game_over', {
+                'game_name': 'arkanoid',
+                'score': this.score,
+                'level': this.level,
+                'bricks_destroyed': this.totalBricksDestroyed,
+                'language': currentArkanoidLanguage || 'ko'
+            });
+        }
         
         // 게임 오버 화면 업데이트
         document.getElementById('finalScore').textContent = this.score.toLocaleString();
