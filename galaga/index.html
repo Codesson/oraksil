@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <!-- Primary Meta Tags -->
+    <title>갤러그 게임 - 온라인 무료 우주 슈팅 게임 | Oraksil</title>
+    <meta name="title" content="갤러그 게임 - 온라인 무료 우주 슈팅 게임 | Oraksil">
+    <meta name="description" content="클래식 갤러그 스타일의 우주 슈팅 게임을 온라인에서 무료로 플레이하세요! 6가지 적 타입, 랭킹 시스템, 스테이지별 난이도 증가. 브라우저에서 바로 즐기는 레트로 아케이드 게임.">
+    <meta name="keywords" content="갤러그, 갤러그게임, 슈팅게임, 우주게임, 아케이드게임, 온라인게임, 무료게임, 레트로게임, Galaga, shooting game">
+    <meta name="author" content="Oraksil">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="Korean">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://oraksil-p4a2tiw9t-codessons-projects.vercel.app/">
+    <meta property="og:title" content="갤러그 게임 - 온라인 무료 우주 슈팅 게임">
+    <meta property="og:description" content="클래식 갤러그 스타일의 우주 슈팅 게임을 온라인에서 무료로 플레이하세요! 6가지 적 타입, 랭킹 시스템, 스테이지별 난이도 증가.">
+    <meta property="og:image" content="https://oraksil-p4a2tiw9t-codessons-projects.vercel.app/og-image.jpg">
+    <meta property="og:site_name" content="Oraksil">
+    <meta property="og:locale" content="ko_KR">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://oraksil-p4a2tiw9t-codessons-projects.vercel.app/">
+    <meta property="twitter:title" content="갤러그 게임 - 온라인 무료 우주 슈팅 게임">
+    <meta property="twitter:description" content="클래식 갤러그 스타일의 우주 슈팅 게임을 온라인에서 무료로 플레이하세요! 6가지 적 타입, 랭킹 시스템, 스테이지별 난이도 증가.">
+    <meta property="twitter:image" content="https://oraksil-p4a2tiw9t-codessons-projects.vercel.app/og-image.jpg">
+    
+    <!-- Additional SEO -->
+    <link rel="canonical" href="https://oraksil-p4a2tiw9t-codessons-projects.vercel.app/">
+    <meta name="theme-color" content="#00ffff">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "VideoGame",
+      "name": "갤러그 게임",
+      "alternateName": "Galaga Game",
+      "description": "클래식 갤러그 스타일의 우주 슈팅 게임을 온라인에서 무료로 플레이하세요! 6가지 적 타입, 랭킹 시스템, 스테이지별 난이도 증가.",
+      "url": "https://oraksil-p4a2tiw9t-codessons-projects.vercel.app/",
+      "image": "https://oraksil-p4a2tiw9t-codessons-projects.vercel.app/og-image.jpg",
+      "genre": ["Action", "Arcade", "Shooter"],
+      "gamePlatform": ["Web Browser"],
+      "operatingSystem": ["Any"],
+      "applicationCategory": "Game",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "KRW",
+        "availability": "https://schema.org/InStock"
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.8",
+        "ratingCount": "1250",
+        "bestRating": "5",
+        "worstRating": "1"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Oraksil"
+      },
+      "datePublished": "2024",
+      "inLanguage": "ko-KR",
+      "isAccessibleForFree": true,
+      "gameFeature": [
+        "6가지 적 타입",
+        "랭킹 시스템",
+        "스테이지별 난이도",
+        "연속 발사",
+        "사운드 효과",
+        "파티클 효과"
+      ]
+    }
+    </script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #000;
+            color: #fff;
+            font-family: 'Courier New', monospace;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        #gameCanvas {
+            border: 2px solid #0ff;
+            background: linear-gradient(180deg, #000428 0%, #004e92 100%);
+            box-shadow: 0 0 20px #0ff;
+        }
+
+        .game-ui {
+            margin-top: 20px;
+            display: flex;
+            gap: 30px;
+            font-size: 18px;
+            color: #0ff;
+            text-shadow: 0 0 5px #0ff;
+        }
+
+        .controls {
+            margin-top: 15px;
+            text-align: center;
+            color: #888;
+            font-size: 14px;
+        }
+
+        h1 {
+            color: #0ff;
+            text-shadow: 0 0 10px #0ff;
+            margin-bottom: 20px;
+            font-size: 32px;
+        }
+
+        .game-over {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.9);
+            padding: 30px;
+            border: 2px solid #0ff;
+            border-radius: 10px;
+            text-align: center;
+            display: none;
+            z-index: 100;
+        }
+
+        .restart-btn {
+            background: #0ff;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            margin-top: 15px;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .restart-btn:hover {
+            background: #fff;
+            transform: scale(1.05);
+            transition: all 0.2s ease;
+        }
+        
+        .pulsing {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+        
+        .game-ui div {
+            background: rgba(0, 255, 255, 0.1);
+            padding: 8px 15px;
+            border-radius: 5px;
+            border: 1px solid rgba(0, 255, 255, 0.3);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #888;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 20px;
+            color: #0ff;
+            font-weight: bold;
+        }
+
+        .records-btn {
+            background: #ff8844;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            margin-top: 10px;
+            margin-left: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .records-btn:hover {
+            background: #ffaa66;
+            transform: scale(1.05);
+            transition: all 0.2s ease;
+        }
+
+        .records-screen {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.9);
+            padding: 30px;
+            border: 2px solid #0ff;
+            border-radius: 10px;
+            text-align: left;
+            display: none;
+            z-index: 100;
+            max-width: 700px;
+            min-width: 600px;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .records-content {
+            margin: 20px 0;
+        }
+
+        .records-section {
+            margin-bottom: 20px;
+        }
+
+        .records-section h3 {
+            color: #0ff;
+            border-bottom: 1px solid #0ff;
+            padding-bottom: 5px;
+            margin-bottom: 10px;
+        }
+
+        .record-item {
+            background: rgba(0, 255, 255, 0.1);
+            padding: 8px 12px;
+            margin: 5px 0;
+            border-radius: 5px;
+            border-left: 3px solid #0ff;
+        }
+
+        .close-btn {
+            background: #666;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .close-btn:hover {
+            background: #888;
+        }
+
+        .stage-display {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.9);
+            padding: 40px;
+            border: 3px solid #0ff;
+            border-radius: 15px;
+            text-align: center;
+            display: none;
+            z-index: 200;
+            color: #0ff;
+            font-size: 36px;
+            font-weight: bold;
+            text-shadow: 0 0 20px #0ff;
+            box-shadow: 0 0 30px #0ff;
+        }
+
+        .stage-number {
+            font-size: 72px;
+            margin: 20px 0;
+            color: #fff;
+            text-shadow: 0 0 30px #0ff;
+        }
+
+        .name-input-section {
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .name-input-section label {
+            display: block;
+            margin-bottom: 8px;
+            color: #0ff;
+            font-size: 14px;
+        }
+
+        .name-input-section input {
+            background: rgba(0, 255, 255, 0.1);
+            border: 2px solid #0ff;
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 16px;
+            width: 200px;
+        }
+
+        .name-input-section input:focus {
+            outline: none;
+            box-shadow: 0 0 10px #0ff;
+        }
+
+        .save-btn {
+            background: #44ff44;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            margin-right: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .save-btn:hover {
+            background: #66ff66;
+            transform: scale(1.05);
+            transition: all 0.2s ease;
+        }
+
+        .clear-btn {
+            background: #ff4444;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            margin-left: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .clear-btn:hover {
+            background: #ff6666;
+        }
+
+        .ranking-item {
+            background: rgba(0, 255, 255, 0.1);
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 5px;
+            border-left: 4px solid #0ff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .ranking-item.rank-1 {
+            border-left-color: #ffd700;
+            background: rgba(255, 215, 0, 0.1);
+        }
+
+        .ranking-item.rank-2 {
+            border-left-color: #c0c0c0;
+            background: rgba(192, 192, 192, 0.1);
+        }
+
+        .ranking-item.rank-3 {
+            border-left-color: #cd7f32;
+            background: rgba(205, 127, 50, 0.1);
+        }
+
+        .ranking-rank {
+            font-weight: bold;
+            font-size: 18px;
+            color: #0ff;
+            min-width: 30px;
+        }
+
+        .ranking-info {
+            flex: 1;
+            margin: 0 15px;
+        }
+
+        .ranking-name {
+            font-weight: bold;
+            color: #fff;
+            font-size: 16px;
+        }
+
+        .ranking-details {
+            font-size: 12px;
+            color: #888;
+            margin-top: 2px;
+        }
+
+        .ranking-score {
+            font-weight: bold;
+            font-size: 18px;
+            color: #0ff;
+        }
+
+        .start-screen {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.9);
+            padding: 40px;
+            border: 2px solid #0ff;
+            border-radius: 10px;
+            text-align: center;
+            z-index: 100;
+        }
+
+        .start-btn {
+            background: #0ff;
+            color: #000;
+            border: none;
+            padding: 15px 30px;
+            margin-top: 20px;
+            cursor: pointer;
+            font-size: 18px;
+            border-radius: 5px;
+            font-weight: bold;
+            width: 150px;
+            height: 55px;
+        }
+
+        .start-btn:hover {
+            background: #fff;
+        }
+
+        .start-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            align-items: flex-end;
+        }
+
+        .view-records-btn {
+            background: #ff8844;
+            color: #000;
+            border: none;
+            padding: 15px 30px;
+            cursor: pointer;
+            font-size: 18px;
+            border-radius: 5px;
+            font-weight: bold;
+            width: 150px;
+            height: 55px;
+        }
+
+        .view-records-btn:hover {
+            background: #ffaa66;
+        }
+
+        /* Game Navigation */
+        .game-nav {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .back-btn {
+            background: rgba(0, 255, 255, 0.2);
+            border: 2px solid #00ffff;
+            color: #00ffff;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .back-btn:hover {
+            background: rgba(0, 255, 255, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 255, 255, 0.3);
+        }
+
+        .nav-spacer {
+            flex: 1;
+        }
+
+        /* Mobile hint */
+        .mobile-hint {
+            font-size: 0.9em;
+            color: #aaa;
+            font-style: italic;
+        }
+
+        /* Mobile Controls */
+        #mobile-controls {
+            display: none; /* Hidden by default, shown on mobile */
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            border-top: 2px solid #00ffff;
+            padding: 15px;
+            z-index: 1000;
+        }
+
+        .mobile-controller {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 600px;
+            margin: 0 auto;
+            height: 120px;
+        }
+
+        /* D-Pad Controls */
+        .movement-controls {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+        }
+
+        .dpad {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-rows: 1fr 1fr 1fr;
+            gap: 5px;
+            width: 120px;
+            height: 120px;
+        }
+
+        .dpad-btn {
+            background: rgba(0, 255, 255, 0.2);
+            border: 2px solid #00ffff;
+            border-radius: 8px;
+            color: #00ffff;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.1s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .dpad-up {
+            grid-column: 2;
+            grid-row: 1;
+        }
+
+        .dpad-middle {
+            grid-column: 1 / 4;
+            grid-row: 2;
+            display: flex;
+            gap: 5px;
+        }
+
+        .dpad-left {
+            flex: 1;
+        }
+
+        .dpad-right {
+            flex: 1;
+        }
+
+        .dpad-down {
+            grid-column: 2;
+            grid-row: 3;
+        }
+
+        .dpad-btn:active,
+        .dpad-btn.pressed {
+            background: rgba(0, 255, 255, 0.6);
+            transform: scale(0.95);
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.8);
+        }
+
+        /* Action Controls */
+        .action-controls {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .action-btn {
+            width: 70px;
+            height: 70px;
+            background: rgba(255, 100, 100, 0.2);
+            border: 2px solid #ff6464;
+            border-radius: 50%;
+            color: #ff6464;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.1s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .action-btn span {
+            font-size: 10px;
+            margin-top: 2px;
+        }
+
+        .fire-btn {
+            background: rgba(255, 100, 100, 0.2);
+            border-color: #ff6464;
+            color: #ff6464;
+        }
+
+        .restart-btn {
+            background: rgba(255, 255, 100, 0.2);
+            border-color: #ffff64;
+            color: #ffff64;
+        }
+
+        .action-btn:active,
+        .action-btn.pressed {
+            transform: scale(0.9);
+            box-shadow: 0 0 15px currentColor;
+        }
+
+        .fire-btn:active,
+        .fire-btn.pressed {
+            background: rgba(255, 100, 100, 0.6);
+        }
+
+        .restart-btn:active,
+        .restart-btn.pressed {
+            background: rgba(255, 255, 100, 0.6);
+        }
+
+        /* Mobile Responsive Layout */
+        @media (max-width: 768px) {
+            #mobile-controls {
+                display: block;
+            }
+
+            body {
+                padding-bottom: 160px; /* Space for mobile controls */
+                padding-top: 80px; /* Space for navigation */
+            }
+
+            #gameCanvas {
+                max-width: 100vw;
+                max-height: calc(100vh - 240px);
+                width: auto;
+                height: auto;
+            }
+
+            .controls {
+                text-align: center;
+                font-size: 0.9em;
+            }
+
+            h1 {
+                font-size: 1.5em;
+                margin: 10px 0;
+            }
+
+            header p {
+                font-size: 0.9em;
+                margin: 5px 0;
+            }
+
+            .game-nav {
+                position: fixed;
+                top: 10px;
+                left: 10px;
+                right: 10px;
+                background: rgba(0, 0, 0, 0.8);
+                backdrop-filter: blur(15px);
+                border-radius: 15px;
+                padding: 10px 15px;
+            }
+
+            .back-btn {
+                padding: 8px 15px;
+                font-size: 0.9em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .mobile-controller {
+                height: 100px;
+                padding: 10px 0;
+            }
+
+            .dpad {
+                width: 100px;
+                height: 100px;
+            }
+
+            .dpad-btn {
+                font-size: 16px;
+            }
+
+            .action-btn {
+                width: 60px;
+                height: 60px;
+                font-size: 12px;
+            }
+
+            .action-controls {
+                gap: 15px;
+            }
+
+            body {
+                padding-bottom: 140px;
+            }
+        }
+
+        /* Landscape mode adjustments */
+        @media (max-height: 600px) and (orientation: landscape) {
+            #mobile-controls {
+                padding: 8px;
+            }
+
+            .mobile-controller {
+                height: 80px;
+            }
+
+            .dpad {
+                width: 80px;
+                height: 80px;
+            }
+
+            .action-btn {
+                width: 50px;
+                height: 50px;
+                font-size: 10px;
+            }
+
+            body {
+                padding-bottom: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="game-nav">
+            <a href="../" class="back-btn" aria-label="메인 페이지로 돌아가기">
+                ← 게임센터
+            </a>
+            <span class="nav-spacer"></span>
+        </nav>
+        <h1>🚀 갤러그 게임 🛸</h1>
+        <p>클래식 아케이드 스타일의 우주 슈팅 게임</p>
+    </header>
+    
+    <main>
+        <section id="game-section" aria-label="게임 플레이 영역">
+            <canvas id="gameCanvas" width="800" height="600" role="application" aria-label="갤러그 게임 캔버스"></canvas>
+        </section>
+    
+
+        
+        <section id="controls-section" aria-label="게임 조작법">
+            <div class="controls">
+                <strong>조작법:</strong> 화살표 키로 이동 | 스페이스바로 발사 | R키로 재시작
+                <br><span class="mobile-hint">모바일: 화면 터치로 조작</span>
+            </div>
+        </section>
+
+        <!-- Mobile Touch Controls -->
+        <section id="mobile-controls" aria-label="모바일 터치 컨트롤">
+            <div class="mobile-controller">
+                <!-- Movement Controls -->
+                <div class="movement-controls">
+                    <div class="dpad">
+                        <button class="dpad-btn dpad-up" data-key="ArrowUp" aria-label="위로 이동">
+                            <span>↑</span>
+                        </button>
+                        <div class="dpad-middle">
+                            <button class="dpad-btn dpad-left" data-key="ArrowLeft" aria-label="왼쪽으로 이동">
+                                <span>←</span>
+                            </button>
+                            <button class="dpad-btn dpad-right" data-key="ArrowRight" aria-label="오른쪽으로 이동">
+                                <span>→</span>
+                            </button>
+                        </div>
+                        <button class="dpad-btn dpad-down" data-key="ArrowDown" aria-label="아래로 이동">
+                            <span>↓</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Action Controls -->
+                <div class="action-controls">
+                    <button class="action-btn fire-btn" data-key="Space" aria-label="발사">
+                        🔥<br><span>발사</span>
+                    </button>
+                    <button class="action-btn restart-btn" data-key="KeyR" aria-label="재시작">
+                        🔄<br><span>재시작</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div class="start-screen" id="startScreen">
+        <h2>🛸 갤러그 게임 🛸</h2>
+        <p>적 우주선을 모두 격파하세요!</p>
+        <p>화살표 키로 이동, 스페이스바로 발사</p>
+        <div class="start-buttons">
+            <button class="start-btn" onclick="game.start()">게임 시작</button>
+            <button class="view-records-btn" onclick="game.showRecords()">기록 보기</button>
+        </div>
+    </div>
+
+    <div class="game-over" id="gameOver">
+        <h2>게임 오버!</h2>
+        <div id="newRecord" style="display: none; color: #ffff44; margin-bottom: 10px;">
+            🎉 새로운 최고 기록! 🎉
+        </div>
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-label">최종 점수</div>
+                <div class="stat-value" id="finalScore">0</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">플레이 시간</div>
+                <div class="stat-value"><span id="gameTime">0</span>초</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">처치한 적</div>
+                <div class="stat-value" id="enemiesKilled">0</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">명중률</div>
+                <div class="stat-value"><span id="accuracy">0</span>%</div>
+            </div>
+        </div>
+        
+        <div class="name-input-section">
+            <label for="playerName">이름을 입력하세요:</label>
+            <input type="text" id="playerName" placeholder="플레이어 이름" maxlength="10" onkeypress="if(event.key==='Enter') game.saveGameWithName()">
+        </div>
+        
+        <button class="save-btn" onclick="game.saveGameWithName()">기록 저장</button>
+        <button class="restart-btn" onclick="game.restart()">다시 시작</button>
+        <button class="records-btn" onclick="game.showRecords()">랭킹 보기</button>
+    </div>
+    
+    <div class="records-screen" id="recordsScreen">
+        <h2>🏆 랭킹 보드 🏆</h2>
+        <div class="records-content">
+            <div class="records-section">
+                <h3>🥇 TOP 10 랭킹</h3>
+                <div id="rankingList"></div>
+            </div>
+            <div class="records-section">
+                <h3>📊 전체 통계</h3>
+                <div id="overallRecords"></div>
+            </div>
+        </div>
+        <button class="close-btn" onclick="game.hideRecords()">닫기</button>
+        <button class="clear-btn" onclick="game.clearRecords()">기록 초기화</button>
+    </div>
+
+    <div class="stage-display" id="stageDisplay">
+        <div>🛸 STAGE 🛸</div>
+        <div class="stage-number" id="stageNumber">1</div>
+        <div>Ready?</div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
