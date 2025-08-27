@@ -342,25 +342,49 @@
             }
 
             body {
-                padding-top: 80px;
+                padding-top: 60px; /* 네비게이션 공간 축소 */
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-start; /* 위쪽으로 정렬 */
+                align-items: center;
+            }
+
+            main {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-start;
+                align-items: center;
+                width: 100%;
+                padding: 0;
+                margin: 0;
+            }
+
+            header {
+                padding: 10px 20px 5px; /* 헤더 패딩 축소 */
+                margin: 0;
             }
 
             #gameCanvas {
-                max-width: calc(100vw - 40px);
-                max-height: calc(100vh - 160px);
+                max-width: calc(100vw - 20px);
+                max-height: calc(100vh - 60px);
                 width: auto;
                 height: auto;
+                margin: 0;
             }
 
             .game-nav {
                 position: fixed;
-                top: 10px;
+                top: 5px;
                 left: 10px;
                 right: 10px;
                 background: rgba(0, 0, 0, 0.8);
                 backdrop-filter: blur(15px);
                 border-radius: 15px;
-                padding: 10px 15px;
+                padding: 8px 15px;
+                height: 45px;
+                display: flex;
+                align-items: center;
             }
 
             .back-btn {
@@ -402,7 +426,7 @@
             }
 
             body {
-                padding-top: 70px;
+                padding-top: 55px;
             }
 
             h1 {
