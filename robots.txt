@@ -2,7 +2,7 @@ User-agent: *
 Allow: /
 
 # Sitemap
-Sitemap: https://oraksil-p4a2tiw9t-codessons-projects.vercel.app/sitemap.xml
+Sitemap: https://oraksil-kickx31e9-codessons-projects.vercel.app/sitemap.xml
 
 # Game-specific paths
 Allow: /index.html

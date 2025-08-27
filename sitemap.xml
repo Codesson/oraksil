@@ -4,19 +4,19 @@
         xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
         http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
     <url>
-        <loc>https://oraksil-q3kscdccr-codessons-projects.vercel.app/</loc>
+        <loc>https://oraksil-kickx31e9-codessons-projects.vercel.app/</loc>
         <lastmod>2024-12-19</lastmod>
         <changefreq>weekly</changefreq>
         <priority>1.0</priority>
     </url>
     <url>
-        <loc>https://oraksil-q3kscdccr-codessons-projects.vercel.app/galaga/</loc>
+        <loc>https://oraksil-kickx31e9-codessons-projects.vercel.app/galaga/</loc>
         <lastmod>2024-12-19</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>https://oraksil-q3kscdccr-codessons-projects.vercel.app/arkanoid/</loc>
+        <loc>https://oraksil-kickx31e9-codessons-projects.vercel.app/arkanoid/</loc>
         <lastmod>2024-12-19</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
