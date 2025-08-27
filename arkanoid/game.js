@@ -708,29 +708,40 @@ class Paddle {
         this.expandTimer = 0;
         this.targetX = x; // 목표 위치 추가
         this.smoothFactor = 0.15; // 부드러운 움직임을 위한 보간 계수
+        this.lastMouseX = undefined; // 마지막 마우스 위치 추적
+        this.isUsingMouse = false; // 마우스 사용 여부 플래그
     }
     
     update(deltaTime, keys, mouseX) {
-        let moved = false;
+        let keyboardMoved = false;
         
-        // 키보드 입력
-        if (keys['ArrowLeft'] && this.x > 0) {
+        // 키보드 입력 확인
+        const isLeftPressed = keys['ArrowLeft'];
+        const isRightPressed = keys['ArrowRight'];
+        
+        // 키보드 입력 처리
+        if (isLeftPressed && this.x > 0) {
             this.x -= this.speed * deltaTime / 1000;
             this.targetX = this.x; // 키보드로 움직일 때는 목표 위치 동기화
-            moved = true;
+            keyboardMoved = true;
+            this.isUsingMouse = false; // 키보드 사용 시 마우스 모드 해제
         }
-        if (keys['ArrowRight'] && this.x < game.width - this.width) {
+        if (isRightPressed && this.x < game.width - this.width) {
             this.x += this.speed * deltaTime / 1000;
             this.targetX = this.x; // 키보드로 움직일 때는 목표 위치 동기화
-            moved = true;
+            keyboardMoved = true;
+            this.isUsingMouse = false; // 키보드 사용 시 마우스 모드 해제
         }
         
-        // 마우스 입력 (키보드 입력이 없을 때)
-        if (!moved && mouseX !== undefined) {
+        // 마우스 입력 처리 (키보드 입력이 없고, 마우스가 실제로 움직였을 때만)
+        if (!keyboardMoved && mouseX !== undefined && this.lastMouseX !== mouseX) {
+            this.isUsingMouse = true;
             this.targetX = mouseX - this.width / 2;
             this.targetX = Math.max(0, Math.min(this.targetX, game.width - this.width));
-            
-            // 부드러운 보간을 사용하여 목표 위치로 이동
+        }
+        
+        // 마우스 모드일 때만 부드러운 이동 적용
+        if (this.isUsingMouse && !keyboardMoved) {
             const distance = this.targetX - this.x;
             if (Math.abs(distance) > 1) { // 1픽셀 이하의 차이는 무시
                 this.x += distance * this.smoothFactor;
@@ -738,6 +749,17 @@ class Paddle {
                 this.x = this.targetX; // 거의 도달했으면 정확한 위치로 설정
             }
         }
+        
+        // 키보드를 놓았을 때 마우스 모드 해제 (모바일 컨트롤 지원)
+        if (!isLeftPressed && !isRightPressed && !keyboardMoved) {
+            // 키보드 입력이 없으면 현재 위치를 목표 위치로 설정하여 움직임 정지
+            if (!this.isUsingMouse) {
+                this.targetX = this.x;
+            }
+        }
+        
+        // 마지막 마우스 위치 업데이트
+        this.lastMouseX = mouseX;
         
         // 경계 확인 (안전장치)
         this.x = Math.max(0, Math.min(this.x, game.width - this.width));
