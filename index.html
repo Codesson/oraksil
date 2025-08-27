@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
     <!-- Primary Meta Tags -->
     <title>갤러그 게임 - 온라인 무료 우주 슈팅 게임 | Oraksil</title>
@@ -469,6 +469,251 @@
         .view-records-btn:hover {
             background: #ffaa66;
         }
+
+        /* Mobile hint */
+        .mobile-hint {
+            font-size: 0.9em;
+            color: #aaa;
+            font-style: italic;
+        }
+
+        /* Mobile Controls */
+        #mobile-controls {
+            display: none; /* Hidden by default, shown on mobile */
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            border-top: 2px solid #00ffff;
+            padding: 15px;
+            z-index: 1000;
+        }
+
+        .mobile-controller {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 600px;
+            margin: 0 auto;
+            height: 120px;
+        }
+
+        /* D-Pad Controls */
+        .movement-controls {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+        }
+
+        .dpad {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-rows: 1fr 1fr 1fr;
+            gap: 5px;
+            width: 120px;
+            height: 120px;
+        }
+
+        .dpad-btn {
+            background: rgba(0, 255, 255, 0.2);
+            border: 2px solid #00ffff;
+            border-radius: 8px;
+            color: #00ffff;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.1s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .dpad-up {
+            grid-column: 2;
+            grid-row: 1;
+        }
+
+        .dpad-middle {
+            grid-column: 1 / 4;
+            grid-row: 2;
+            display: flex;
+            gap: 5px;
+        }
+
+        .dpad-left {
+            flex: 1;
+        }
+
+        .dpad-right {
+            flex: 1;
+        }
+
+        .dpad-down {
+            grid-column: 2;
+            grid-row: 3;
+        }
+
+        .dpad-btn:active,
+        .dpad-btn.pressed {
+            background: rgba(0, 255, 255, 0.6);
+            transform: scale(0.95);
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.8);
+        }
+
+        /* Action Controls */
+        .action-controls {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .action-btn {
+            width: 70px;
+            height: 70px;
+            background: rgba(255, 100, 100, 0.2);
+            border: 2px solid #ff6464;
+            border-radius: 50%;
+            color: #ff6464;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.1s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .action-btn span {
+            font-size: 10px;
+            margin-top: 2px;
+        }
+
+        .fire-btn {
+            background: rgba(255, 100, 100, 0.2);
+            border-color: #ff6464;
+            color: #ff6464;
+        }
+
+        .restart-btn {
+            background: rgba(255, 255, 100, 0.2);
+            border-color: #ffff64;
+            color: #ffff64;
+        }
+
+        .action-btn:active,
+        .action-btn.pressed {
+            transform: scale(0.9);
+            box-shadow: 0 0 15px currentColor;
+        }
+
+        .fire-btn:active,
+        .fire-btn.pressed {
+            background: rgba(255, 100, 100, 0.6);
+        }
+
+        .restart-btn:active,
+        .restart-btn.pressed {
+            background: rgba(255, 255, 100, 0.6);
+        }
+
+        /* Mobile Responsive Layout */
+        @media (max-width: 768px) {
+            #mobile-controls {
+                display: block;
+            }
+
+            body {
+                padding-bottom: 160px; /* Space for mobile controls */
+            }
+
+            #gameCanvas {
+                max-width: 100vw;
+                max-height: calc(100vh - 200px);
+                width: auto;
+                height: auto;
+            }
+
+            .controls {
+                text-align: center;
+                font-size: 0.9em;
+            }
+
+            h1 {
+                font-size: 1.5em;
+                margin: 10px 0;
+            }
+
+            header p {
+                font-size: 0.9em;
+                margin: 5px 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .mobile-controller {
+                height: 100px;
+                padding: 10px 0;
+            }
+
+            .dpad {
+                width: 100px;
+                height: 100px;
+            }
+
+            .dpad-btn {
+                font-size: 16px;
+            }
+
+            .action-btn {
+                width: 60px;
+                height: 60px;
+                font-size: 12px;
+            }
+
+            .action-controls {
+                gap: 15px;
+            }
+
+            body {
+                padding-bottom: 140px;
+            }
+        }
+
+        /* Landscape mode adjustments */
+        @media (max-height: 600px) and (orientation: landscape) {
+            #mobile-controls {
+                padding: 8px;
+            }
+
+            .mobile-controller {
+                height: 80px;
+            }
+
+            .dpad {
+                width: 80px;
+                height: 80px;
+            }
+
+            .action-btn {
+                width: 50px;
+                height: 50px;
+                font-size: 10px;
+            }
+
+            body {
+                padding-bottom: 100px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -487,6 +732,42 @@
         <section id="controls-section" aria-label="게임 조작법">
             <div class="controls">
                 <strong>조작법:</strong> 화살표 키로 이동 | 스페이스바로 발사 | R키로 재시작
+                <br><span class="mobile-hint">모바일: 화면 터치로 조작</span>
+            </div>
+        </section>
+
+        <!-- Mobile Touch Controls -->
+        <section id="mobile-controls" aria-label="모바일 터치 컨트롤">
+            <div class="mobile-controller">
+                <!-- Movement Controls -->
+                <div class="movement-controls">
+                    <div class="dpad">
+                        <button class="dpad-btn dpad-up" data-key="ArrowUp" aria-label="위로 이동">
+                            <span>↑</span>
+                        </button>
+                        <div class="dpad-middle">
+                            <button class="dpad-btn dpad-left" data-key="ArrowLeft" aria-label="왼쪽으로 이동">
+                                <span>←</span>
+                            </button>
+                            <button class="dpad-btn dpad-right" data-key="ArrowRight" aria-label="오른쪽으로 이동">
+                                <span>→</span>
+                            </button>
+                        </div>
+                        <button class="dpad-btn dpad-down" data-key="ArrowDown" aria-label="아래로 이동">
+                            <span>↓</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Action Controls -->
+                <div class="action-controls">
+                    <button class="action-btn fire-btn" data-key="Space" aria-label="발사">
+                        🔥<br><span>발사</span>
+                    </button>
+                    <button class="action-btn restart-btn" data-key="KeyR" aria-label="재시작">
+                        🔄<br><span>재시작</span>
+                    </button>
+                </div>
             </div>
         </section>
     </main>

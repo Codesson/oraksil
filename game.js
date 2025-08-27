@@ -119,6 +119,163 @@ class Game {
         document.addEventListener('keyup', (e) => {
             this.keys[e.code] = false;
         });
+
+        // 모바일 터치 컨트롤 설정
+        this.setupMobileControls();
+        
+        // 창 크기 변경 이벤트
+        window.addEventListener('resize', () => {
+            this.resizeCanvas();
+        });
+        
+        // 방향 전환 이벤트
+        window.addEventListener('orientationchange', () => {
+            setTimeout(() => {
+                this.resizeCanvas();
+            }, 100);
+        });
+        
+        // 초기 캔버스 크기 설정
+        this.resizeCanvas();
+    }
+
+    setupMobileControls() {
+        const mobileControls = document.getElementById('mobile-controls');
+        if (!mobileControls) return;
+
+        // 모든 컨트롤 버튼 가져오기
+        const controlButtons = mobileControls.querySelectorAll('[data-key]');
+        
+        // 활성 터치 추적
+        this.activeTouches = new Set();
+        
+        controlButtons.forEach(button => {
+            const key = button.getAttribute('data-key');
+            
+            // 터치 시작 이벤트
+            button.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                this.handleMobileInput(key, true);
+                button.classList.add('pressed');
+                this.addHapticFeedback();
+            });
+            
+            // 터치 종료 이벤트
+            button.addEventListener('touchend', (e) => {
+                e.preventDefault();
+                this.handleMobileInput(key, false);
+                button.classList.remove('pressed');
+            });
+            
+            // 터치 취소 이벤트 (손가락이 버튼 영역을 벗어날 때)
+            button.addEventListener('touchcancel', (e) => {
+                e.preventDefault();
+                this.handleMobileInput(key, false);
+                button.classList.remove('pressed');
+            });
+            
+            // 마우스 이벤트 (데스크톱 테스트용)
+            button.addEventListener('mousedown', (e) => {
+                e.preventDefault();
+                this.handleMobileInput(key, true);
+                button.classList.add('pressed');
+            });
+            
+            button.addEventListener('mouseup', (e) => {
+                e.preventDefault();
+                this.handleMobileInput(key, false);
+                button.classList.remove('pressed');
+            });
+            
+            button.addEventListener('mouseleave', (e) => {
+                this.handleMobileInput(key, false);
+                button.classList.remove('pressed');
+            });
+        });
+
+        // 모바일 컨트롤에서 컨텍스트 메뉴 방지
+        mobileControls.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+        });
+
+        // 컨트롤 터치 시 스크롤 방지
+        mobileControls.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+        });
+    }
+
+    handleMobileInput(key, isPressed) {
+        // 모바일 버튼 키를 게임 키로 매핑
+        const keyMap = {
+            'ArrowUp': 'ArrowUp',
+            'ArrowDown': 'ArrowDown', 
+            'ArrowLeft': 'ArrowLeft',
+            'ArrowRight': 'ArrowRight',
+            'Space': 'Space',
+            'KeyR': 'KeyR'
+        };
+
+        const gameKey = keyMap[key];
+        if (!gameKey) return;
+
+        if (isPressed) {
+            this.keys[gameKey] = true;
+            this.activeTouches.add(gameKey);
+            
+            // 특별한 액션 처리
+            if (gameKey === 'KeyR' && this.gameState !== 'playing') {
+                this.restart();
+            }
+        } else {
+            this.keys[gameKey] = false;
+            this.activeTouches.delete(gameKey);
+        }
+    }
+
+    addHapticFeedback() {
+        // 모바일 기기를 위한 햅틱 피드백 추가
+        if (navigator.vibrate) {
+            navigator.vibrate(50); // 50ms 진동
+        }
+    }
+
+    resizeCanvas() {
+        const canvas = document.getElementById('gameCanvas');
+        const isMobile = window.innerWidth <= 768;
+        
+        if (isMobile) {
+            // 모바일에서는 화면에 맞춰 캔버스 크기 조정
+            const maxWidth = window.innerWidth - 20; // 여백 20px
+            const maxHeight = window.innerHeight - 200; // 컨트롤러와 헤더 공간 확보
+            
+            // 원본 비율 유지 (800:600 = 4:3)
+            const aspectRatio = 800 / 600;
+            let newWidth, newHeight;
+            
+            if (maxWidth / maxHeight > aspectRatio) {
+                // 높이 기준으로 크기 결정
+                newHeight = maxHeight;
+                newWidth = maxHeight * aspectRatio;
+            } else {
+                // 너비 기준으로 크기 결정
+                newWidth = maxWidth;
+                newHeight = maxWidth / aspectRatio;
+            }
+            
+            // 캔버스 디스플레이 크기 설정
+            canvas.style.width = `${newWidth}px`;
+            canvas.style.height = `${newHeight}px`;
+            
+            // 스케일 팩터 계산 및 저장
+            this.scaleX = newWidth / 800;
+            this.scaleY = newHeight / 600;
+        } else {
+            // 데스크톱에서는 원본 크기 유지
+            canvas.style.width = '800px';
+            canvas.style.height = '600px';
+            this.scaleX = 1;
+            this.scaleY = 1;
+        }
     }
     
     start() {
