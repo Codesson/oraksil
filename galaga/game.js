@@ -489,6 +489,7 @@ class Game {
     
     start() {
         document.getElementById('startScreen').style.display = 'none';
+        this.stageClearing = false; // 스테이지 클리어 진행 중 플래그 초기화
         this.gameStats.startTime = Date.now();
         this.gameStats.totalEnemiesKilled = 0;
         this.gameStats.totalShots = 0;
@@ -505,6 +506,7 @@ class Game {
         this.bullets = [];
         this.enemyBullets = [];
         this.particles = [];
+        this.stageClearing = false; // 스테이지 클리어 진행 중 플래그 초기화
         this.player = new Player(this.width / 2, this.height - 60);
         this.gameStats.startTime = Date.now();
         this.gameStats.totalEnemiesKilled = 0;
@@ -630,9 +632,15 @@ class Game {
         this.checkCollisions();
         
         // 게임 상태 체크
-        if (this.enemies.length === 0) {
+        if (this.enemies.length === 0 && !this.stageClearing) {
+            this.stageClearing = true; // 스테이지 클리어 진행 중 플래그
             this.level++;
-            this.showStageDisplay();
+            
+            // 300ms 후 스테이지 표시
+            setTimeout(() => {
+                this.showStageDisplay();
+                this.stageClearing = false; // 플래그 리셋
+            }, 300);
         }
         
         if (this.lives <= 0) {
