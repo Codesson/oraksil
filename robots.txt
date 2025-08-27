@@ -1,0 +1,21 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://oraksil-p4a2tiw9t-codessons-projects.vercel.app/sitemap.xml
+
+# Game-specific paths
+Allow: /index.html
+Allow: /game.js
+Allow: /*.css
+Allow: /*.js
+
+# Disallow unnecessary files
+Disallow: /.git/
+Disallow: /.vercel/
+Disallow: /node_modules/
+
+# Game metadata
+# This site contains: Galaga-style space shooting game
+# Languages: Korean (primary), with some English elements
+# Content: Browser-based arcade game, free to play

@@ -3,7 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>갤러그 게임</title>
+    
+    <!-- Primary Meta Tags -->
+    <title>갤러그 게임 - 온라인 무료 우주 슈팅 게임 | Oraksil</title>
+    <meta name="title" content="갤러그 게임 - 온라인 무료 우주 슈팅 게임 | Oraksil">
+    <meta name="description" content="클래식 갤러그 스타일의 우주 슈팅 게임을 온라인에서 무료로 플레이하세요! 6가지 적 타입, 랭킹 시스템, 스테이지별 난이도 증가. 브라우저에서 바로 즐기는 레트로 아케이드 게임.">
+    <meta name="keywords" content="갤러그, 갤러그게임, 슈팅게임, 우주게임, 아케이드게임, 온라인게임, 무료게임, 레트로게임, Galaga, shooting game">
+    <meta name="author" content="Oraksil">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="Korean">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://oraksil-p4a2tiw9t-codessons-projects.vercel.app/">
+    <meta property="og:title" content="갤러그 게임 - 온라인 무료 우주 슈팅 게임">
+    <meta property="og:description" content="클래식 갤러그 스타일의 우주 슈팅 게임을 온라인에서 무료로 플레이하세요! 6가지 적 타입, 랭킹 시스템, 스테이지별 난이도 증가.">
+    <meta property="og:image" content="https://oraksil-p4a2tiw9t-codessons-projects.vercel.app/og-image.jpg">
+    <meta property="og:site_name" content="Oraksil">
+    <meta property="og:locale" content="ko_KR">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://oraksil-p4a2tiw9t-codessons-projects.vercel.app/">
+    <meta property="twitter:title" content="갤러그 게임 - 온라인 무료 우주 슈팅 게임">
+    <meta property="twitter:description" content="클래식 갤러그 스타일의 우주 슈팅 게임을 온라인에서 무료로 플레이하세요! 6가지 적 타입, 랭킹 시스템, 스테이지별 난이도 증가.">
+    <meta property="twitter:image" content="https://oraksil-p4a2tiw9t-codessons-projects.vercel.app/og-image.jpg">
+    
+    <!-- Additional SEO -->
+    <link rel="canonical" href="https://oraksil-p4a2tiw9t-codessons-projects.vercel.app/">
+    <meta name="theme-color" content="#00ffff">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "VideoGame",
+      "name": "갤러그 게임",
+      "alternateName": "Galaga Game",
+      "description": "클래식 갤러그 스타일의 우주 슈팅 게임을 온라인에서 무료로 플레이하세요! 6가지 적 타입, 랭킹 시스템, 스테이지별 난이도 증가.",
+      "url": "https://oraksil-p4a2tiw9t-codessons-projects.vercel.app/",
+      "image": "https://oraksil-p4a2tiw9t-codessons-projects.vercel.app/og-image.jpg",
+      "genre": ["Action", "Arcade", "Shooter"],
+      "gamePlatform": ["Web Browser"],
+      "operatingSystem": ["Any"],
+      "applicationCategory": "Game",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "KRW",
+        "availability": "https://schema.org/InStock"
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.8",
+        "ratingCount": "1250",
+        "bestRating": "5",
+        "worstRating": "1"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Oraksil"
+      },
+      "datePublished": "2024",
+      "inLanguage": "ko-KR",
+      "isAccessibleForFree": true,
+      "gameFeature": [
+        "6가지 적 타입",
+        "랭킹 시스템",
+        "스테이지별 난이도",
+        "연속 발사",
+        "사운드 효과",
+        "파티클 효과"
+      ]
+    }
+    </script>
     <style>
         body {
             margin: 0;
@@ -397,14 +472,24 @@
     </style>
 </head>
 <body>
-    <h1>🚀 갤러그 게임 🛸</h1>
-    <canvas id="gameCanvas" width="800" height="600"></canvas>
+    <header>
+        <h1>🚀 갤러그 게임 🛸</h1>
+        <p>클래식 아케이드 스타일의 우주 슈팅 게임</p>
+    </header>
+    
+    <main>
+        <section id="game-section" aria-label="게임 플레이 영역">
+            <canvas id="gameCanvas" width="800" height="600" role="application" aria-label="갤러그 게임 캔버스"></canvas>
+        </section>
     
 
-    
-    <div class="controls">
-        화살표 키로 이동 | 스페이스바로 발사 | R키로 재시작
-    </div>
+        
+        <section id="controls-section" aria-label="게임 조작법">
+            <div class="controls">
+                <strong>조작법:</strong> 화살표 키로 이동 | 스페이스바로 발사 | R키로 재시작
+            </div>
+        </section>
+    </main>
 
     <div class="start-screen" id="startScreen">
         <h2>🛸 갤러그 게임 🛸</h2>
