@@ -606,22 +606,21 @@
             flex: 1;
             display: flex;
             justify-content: center;
-            gap: 20px;
+            align-items: center;
         }
 
         .action-btn {
-            width: 70px;
-            height: 70px;
-            background: rgba(255, 100, 100, 0.15);
-            border: 2px solid rgba(255, 100, 100, 0.4);
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 100, 100, 0.2);
+            border: 3px solid rgba(255, 100, 100, 0.6);
             border-radius: 50%;
-            color: rgba(255, 100, 100, 0.8);
-            font-size: 14px;
+            color: rgba(255, 100, 100, 0.9);
+            font-size: 16px;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.1s ease;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
             user-select: none;
@@ -630,41 +629,13 @@
             pointer-events: auto; /* 버튼은 터치 이벤트 허용 */
         }
 
-        .action-btn span {
-            font-size: 10px;
-            margin-top: 2px;
-        }
-
-        .fire-btn {
-            background: rgba(255, 100, 100, 0.15);
-            border-color: rgba(255, 100, 100, 0.4);
-            color: rgba(255, 100, 100, 0.8);
-        }
-
-        .restart-btn {
-            background: rgba(255, 255, 100, 0.15);
-            border-color: rgba(255, 255, 100, 0.4);
-            color: rgba(255, 255, 100, 0.8);
-        }
-
         .action-btn:active,
         .action-btn.pressed {
             transform: scale(0.9);
-            box-shadow: 0 0 15px currentColor;
-        }
-
-        .fire-btn:active,
-        .fire-btn.pressed {
+            box-shadow: 0 0 20px rgba(255, 100, 100, 0.8);
             background: rgba(255, 100, 100, 0.4);
-            border-color: rgba(255, 100, 100, 0.8);
+            border-color: rgba(255, 100, 100, 0.9);
             color: rgba(255, 100, 100, 1);
-        }
-
-        .restart-btn:active,
-        .restart-btn.pressed {
-            background: rgba(255, 255, 100, 0.4);
-            border-color: rgba(255, 255, 100, 0.8);
-            color: rgba(255, 255, 100, 1);
         }
 
         /* Mobile Responsive Layout */
@@ -850,10 +821,7 @@
                 <!-- Action Controls -->
                 <div class="action-controls">
                     <button class="action-btn fire-btn" data-key="Space" aria-label="발사">
-                        🔥<br><span data-i18n="fireButton">발사</span>
-                    </button>
-                    <button class="action-btn restart-btn" data-key="KeyR" aria-label="재시작">
-                        🔄<br><span data-i18n="restartButton">재시작</span>
+                        <span data-i18n="fireButton">발사</span>
                     </button>
                 </div>
             </div>
