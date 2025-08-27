@@ -769,13 +769,13 @@
 <body>
     <header>
         <nav class="game-nav">
-            <a href="../index.html" class="back-btn" aria-label="메인 페이지로 돌아가기">
+            <a href="../index.html" class="back-btn" data-i18n="backToGameCenter" aria-label="메인 페이지로 돌아가기">
                 ← 게임센터
             </a>
             <span class="nav-spacer"></span>
         </nav>
-        <h1>🚀 갤러그 게임 🛸</h1>
-        <p>클래식 아케이드 스타일의 우주 슈팅 게임</p>
+        <h1 data-i18n="gameTitle">🚀 갤러그 게임 🛸</h1>
+        <p data-i18n="gameSubtitle">클래식 아케이드 스타일의 우주 슈팅 게임</p>
     </header>
     
     <main>
@@ -787,8 +787,8 @@
         
         <section id="controls-section" aria-label="게임 조작법">
             <div class="controls">
-                <strong>조작법:</strong> 화살표 키로 이동 | 스페이스바로 발사 | R키로 재시작
-                <br><span class="mobile-hint">모바일: 화면 터치로 조작</span>
+                <strong data-i18n="controlsLabel">조작법:</strong> <span data-i18n="controlsText">화살표 키로 이동 | 스페이스바로 발사 | R키로 재시작</span>
+                <br><span class="mobile-hint" data-i18n="mobileHint">모바일: 화면 터치로 조작</span>
             </div>
         </section>
 
@@ -818,10 +818,10 @@
                 <!-- Action Controls -->
                 <div class="action-controls">
                     <button class="action-btn fire-btn" data-key="Space" aria-label="발사">
-                        🔥<br><span>발사</span>
+                        🔥<br><span data-i18n="fireButton">발사</span>
                     </button>
                     <button class="action-btn restart-btn" data-key="KeyR" aria-label="재시작">
-                        🔄<br><span>재시작</span>
+                        🔄<br><span data-i18n="restartButton">재시작</span>
                     </button>
                 </div>
             </div>
@@ -829,47 +829,47 @@
     </main>
 
     <div class="start-screen" id="startScreen">
-        <h2>🛸 갤러그 게임 🛸</h2>
-        <p>적 우주선을 모두 격파하세요!</p>
-        <p>화살표 키로 이동, 스페이스바로 발사</p>
+        <h2 data-i18n="startTitle">🛸 갤러그 게임 🛸</h2>
+        <p data-i18n="startDescription">적 우주선을 모두 격파하세요!</p>
+        <p data-i18n="startInstructions">화살표 키로 이동, 스페이스바로 발사</p>
         <div class="start-buttons">
-            <button class="start-btn" onclick="game.start()">게임 시작</button>
-            <button class="view-records-btn" onclick="game.showRecords()">기록 보기</button>
+            <button class="start-btn" onclick="game.start()" data-i18n="gameStartButton">게임 시작</button>
+            <button class="view-records-btn" onclick="game.showRecords()" data-i18n="viewRecordsButton">기록 보기</button>
         </div>
     </div>
 
     <div class="game-over" id="gameOver">
-        <h2>게임 오버!</h2>
+        <h2 data-i18n="gameOverTitle">게임 오버!</h2>
         <div id="newRecord" style="display: none; color: #ffff44; margin-bottom: 10px;">
             🎉 새로운 최고 기록! 🎉
         </div>
         <div class="stats-grid">
             <div class="stat-item">
-                <div class="stat-label">최종 점수</div>
+                <div class="stat-label" data-i18n="gameOverScore">최종 점수</div>
                 <div class="stat-value" id="finalScore">0</div>
             </div>
             <div class="stat-item">
-                <div class="stat-label">플레이 시간</div>
+                <div class="stat-label" data-i18n="gameOverTime">플레이 시간</div>
                 <div class="stat-value"><span id="gameTime">0</span>초</div>
             </div>
             <div class="stat-item">
-                <div class="stat-label">처치한 적</div>
+                <div class="stat-label" data-i18n="gameOverEnemiesKilled">처치한 적</div>
                 <div class="stat-value" id="enemiesKilled">0</div>
             </div>
             <div class="stat-item">
-                <div class="stat-label">명중률</div>
+                <div class="stat-label" data-i18n="gameOverAccuracy">명중률</div>
                 <div class="stat-value"><span id="accuracy">0</span>%</div>
             </div>
         </div>
         
         <div class="name-input-section">
-            <label for="playerName">이름을 입력하세요:</label>
+            <label for="playerName" data-i18n="playerNameLabel">이름을 입력하세요:</label>
             <input type="text" id="playerName" placeholder="플레이어 이름" maxlength="10" onkeypress="if(event.key==='Enter') game.saveGameWithName()">
         </div>
         
-        <button class="save-btn" onclick="game.saveGameWithName()">기록 저장</button>
-        <button class="restart-btn" onclick="game.restart()">다시 시작</button>
-        <button class="records-btn" onclick="game.showRecords()">랭킹 보기</button>
+        <button class="save-btn" onclick="game.saveGameWithName()" data-i18n="saveRecordButton">기록 저장</button>
+        <button class="restart-btn" onclick="game.restart()" data-i18n="restartButton">다시 시작</button>
+        <button class="records-btn" onclick="game.showRecords()" data-i18n="viewRecordsButton">랭킹 보기</button>
     </div>
     
     <div class="records-screen" id="recordsScreen">

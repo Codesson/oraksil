@@ -111,6 +111,41 @@
             padding: 40px 20px;
             background: rgba(0, 0, 0, 0.2);
             backdrop-filter: blur(10px);
+            position: relative;
+        }
+
+        /* Language Selector */
+        .language-selector {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .lang-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            color: white;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+        }
+
+        .lang-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .lang-btn.active {
+            background: rgba(255, 107, 107, 0.8);
+            border-color: #ff6b6b;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
         }
 
         .logo {
@@ -334,6 +369,17 @@
             header, main {
                 padding: 20px 15px;
             }
+
+            .language-selector {
+                top: 15px;
+                right: 15px;
+                gap: 8px;
+            }
+
+            .lang-btn {
+                padding: 6px 12px;
+                font-size: 0.8rem;
+            }
         }
 
         @media (max-width: 480px) {
@@ -358,6 +404,12 @@
 
     <!-- Header -->
     <header>
+        <!-- Language Selector -->
+        <div class="language-selector">
+            <button class="lang-btn" data-lang="ko" onclick="switchLanguage('ko')">한국어</button>
+            <button class="lang-btn" data-lang="en" onclick="switchLanguage('en')">English</button>
+        </div>
+        
         <h1 class="logo">🎮 ORAKSIL</h1>
         <p class="subtitle">클래식 아케이드 게임의 세계로 떠나보세요!</p>
     </header>
@@ -465,6 +517,248 @@
     </footer>
 
     <script>
+        // Internationalization (i18n) data
+        const translations = {
+            ko: {
+                // Header
+                title: "🎮 ORAKSIL",
+                subtitle: "클래식 아케이드 게임의 세계로 떠나보세요!",
+                
+                // Section titles
+                popularGames: "🕹️ 인기 게임",
+                
+                // Galaga game
+                galagaTitle: "갤러그",
+                galagaDescription: "클래식 우주 슈팅 게임의 대표작! 적 우주선을 격파하고 최고 점수를 달성하세요.",
+                galagaFeatures: [
+                    "6가지 다양한 적 타입",
+                    "스테이지별 난이도 증가", 
+                    "랭킹 시스템",
+                    "모바일 터치 컨트롤 지원",
+                    "사운드 & 파티클 효과"
+                ],
+                playButton: "게임 시작",
+                
+                // Coming soon games
+                arkanoidTitle: "아르카노이드",
+                arkanoidDescription: "벽돌을 깨며 점수를 얻는 클래식 아케이드 게임입니다.",
+                arkanoidFeatures: [
+                    "다양한 파워업 아이템",
+                    "물리 기반 볼 움직임",
+                    "여러 레벨 구성",
+                    "특수 벽돌 효과"
+                ],
+                
+                pacmanTitle: "팩맨",
+                pacmanDescription: "미로를 탐험하며 점들을 먹고 유령들을 피하는 전설적인 게임입니다.",
+                pacmanFeatures: [
+                    "클래식 미로 디자인",
+                    "AI 유령 패턴",
+                    "파워 펠릿 시스템",
+                    "보너스 과일 아이템"
+                ],
+                
+                snakeTitle: "스네이크",
+                snakeDescription: "뱀을 조종해서 먹이를 먹고 성장시키는 중독성 있는 게임입니다.",
+                snakeFeatures: [
+                    "부드러운 뱀 움직임",
+                    "다양한 먹이 타입",
+                    "속도 증가 시스템",
+                    "벽 충돌 감지"
+                ],
+                
+                pongTitle: "퐁",
+                pongDescription: "최초의 비디오 게임 중 하나인 클래식 탁구 게임입니다.",
+                pongFeatures: [
+                    "1vs1 대전 모드",
+                    "AI 난이도 조절", 
+                    "물리 기반 볼 움직임",
+                    "레트로 사운드"
+                ],
+                
+                tetrisTitle: "테트리스",
+                tetrisDescription: "떨어지는 블록을 조작해서 줄을 완성하는 퍼즐 게임입니다.",
+                tetrisFeatures: [
+                    "7가지 테트로미노",
+                    "라인 클리어 시스템",
+                    "레벨별 속도 증가",
+                    "다음 블록 미리보기"
+                ],
+                
+                comingSoon: "출시 예정",
+                comingSoonAlert: "해당 게임은 아직 준비 중입니다!",
+                
+                // Footer
+                copyright: "© 2024 Oraksil 게임센터. 모든 권리 보유.",
+                disclaimer: "모든 게임은 교육 및 오락 목적으로 제작되었습니다."
+            },
+            en: {
+                // Header
+                title: "🎮 ORAKSIL",
+                subtitle: "Embark on the world of classic arcade games!",
+                
+                // Section titles
+                popularGames: "🕹️ Popular Games",
+                
+                // Galaga game
+                galagaTitle: "Galaga",
+                galagaDescription: "The classic space shooter masterpiece! Defeat enemy spaceships and achieve the highest score.",
+                galagaFeatures: [
+                    "6 different enemy types",
+                    "Stage-based difficulty progression",
+                    "Ranking system",
+                    "Mobile touch control support",
+                    "Sound & particle effects"
+                ],
+                playButton: "Start Game",
+                
+                // Coming soon games
+                arkanoidTitle: "Arkanoid",
+                arkanoidDescription: "A classic arcade game where you break bricks to earn points.",
+                arkanoidFeatures: [
+                    "Various power-up items",
+                    "Physics-based ball movement",
+                    "Multiple level configurations",
+                    "Special brick effects"
+                ],
+                
+                pacmanTitle: "Pac-Man",
+                pacmanDescription: "The legendary game where you explore mazes, eat dots, and avoid ghosts.",
+                pacmanFeatures: [
+                    "Classic maze design",
+                    "AI ghost patterns",
+                    "Power pellet system",
+                    "Bonus fruit items"
+                ],
+                
+                snakeTitle: "Snake",
+                snakeDescription: "An addictive game where you control a snake to eat food and grow.",
+                snakeFeatures: [
+                    "Smooth snake movement",
+                    "Various food types",
+                    "Speed increase system",
+                    "Wall collision detection"
+                ],
+                
+                pongTitle: "Pong",
+                pongDescription: "One of the first video games ever created - a classic table tennis game.",
+                pongFeatures: [
+                    "1vs1 battle mode",
+                    "AI difficulty adjustment",
+                    "Physics-based ball movement",
+                    "Retro sounds"
+                ],
+                
+                tetrisTitle: "Tetris",
+                tetrisDescription: "A puzzle game where you manipulate falling blocks to complete lines.",
+                tetrisFeatures: [
+                    "7 types of tetrominoes",
+                    "Line clear system",
+                    "Level-based speed increase",
+                    "Next block preview"
+                ],
+                
+                comingSoon: "Coming Soon",
+                comingSoonAlert: "This game is still under development!",
+                
+                // Footer
+                copyright: "© 2024 Oraksil Game Center. All rights reserved.",
+                disclaimer: "All games are created for educational and entertainment purposes."
+            }
+        };
+
+        // Current language (default: auto-detect or Korean)
+        let currentLanguage = localStorage.getItem('language') || 
+                             (navigator.language.startsWith('ko') ? 'ko' : 'en');
+
+        // Translation function
+        function t(key) {
+            const keys = key.split('.');
+            let value = translations[currentLanguage];
+            
+            for (const k of keys) {
+                value = value?.[k];
+            }
+            
+            return value || key;
+        }
+
+        // Update page content with translations
+        function updateLanguage() {
+            // Update meta tags
+            document.title = currentLanguage === 'ko' 
+                ? "Oraksil 게임센터 - 온라인 무료 아케이드 게임 모음"
+                : "Oraksil Game Center - Free Online Arcade Games Collection";
+            
+            // Update header
+            document.querySelector('.logo').textContent = t('title');
+            document.querySelector('.subtitle').textContent = t('subtitle');
+            
+            // Update section title
+            document.querySelector('.section-title').textContent = t('popularGames');
+            
+            // Update Galaga game
+            const galagaCard = document.querySelector('[data-game="galaga"]');
+            if (galagaCard) {
+                galagaCard.querySelector('.game-title').textContent = t('galagaTitle');
+                galagaCard.querySelector('.game-description').textContent = t('galagaDescription');
+                
+                const galagaFeatures = galagaCard.querySelectorAll('.game-features li');
+                const galagaFeatureTexts = t('galagaFeatures');
+                galagaFeatures.forEach((li, index) => {
+                    if (galagaFeatureTexts[index]) {
+                        li.textContent = galagaFeatureTexts[index];
+                    }
+                });
+                
+                galagaCard.querySelector('.play-button').textContent = t('playButton');
+            }
+            
+            // Update coming soon games
+            const comingSoonCards = document.querySelectorAll('.coming-soon');
+            const gameKeys = ['arkanoid', 'pacman', 'snake', 'pong', 'tetris'];
+            
+            comingSoonCards.forEach((card, index) => {
+                if (gameKeys[index]) {
+                    const gameKey = gameKeys[index];
+                    const title = card.querySelector('.game-title');
+                    const description = card.querySelector('.game-description');
+                    const features = card.querySelectorAll('.game-features li');
+                    const button = card.querySelector('.play-button');
+                    
+                    if (title) title.textContent = t(gameKey + 'Title');
+                    if (description) description.textContent = t(gameKey + 'Description');
+                    if (button) button.textContent = t('comingSoon');
+                    
+                    const featureTexts = t(gameKey + 'Features');
+                    features.forEach((li, fIndex) => {
+                        if (featureTexts[fIndex]) {
+                            li.textContent = featureTexts[fIndex];
+                        }
+                    });
+                }
+            });
+            
+            // Update footer
+            const footerTexts = document.querySelectorAll('footer p');
+            if (footerTexts[0]) footerTexts[0].textContent = t('copyright');
+            if (footerTexts[1]) footerTexts[1].querySelector('small').textContent = t('disclaimer');
+            
+            // Save language preference
+            localStorage.setItem('language', currentLanguage);
+        }
+
+        // Language switcher function
+        function switchLanguage(lang) {
+            currentLanguage = lang;
+            updateLanguage();
+            
+            // Update language selector UI
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.lang === lang);
+            });
+        }
+
         // Animated background stars
         function createStars() {
             const bgAnimation = document.getElementById('bg-animation');
@@ -484,16 +778,25 @@
         function playGame(gameName) {
             switch(gameName) {
                 case 'galaga':
-                    window.location.href = './galaga/index.html';
+                    // Pass language parameter to galaga game
+                    window.location.href = `./galaga/index.html?lang=${currentLanguage}`;
                     break;
                 default:
-                    alert('해당 게임은 아직 준비 중입니다!');
+                    alert(t('comingSoonAlert'));
             }
         }
 
         // Game card hover effects
         document.addEventListener('DOMContentLoaded', function() {
             createStars();
+            
+            // Initialize language
+            updateLanguage();
+            
+            // Set initial active language button
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.lang === currentLanguage);
+            });
             
             const gameCards = document.querySelectorAll('.game-card:not(.coming-soon)');
             gameCards.forEach(card => {

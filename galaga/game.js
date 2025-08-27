@@ -1,5 +1,187 @@
 // 갤러그 게임 JavaScript 구현
 
+// Internationalization (i18n) for Galaga game
+const galagaTranslations = {
+    ko: {
+        // Header
+        gameTitle: "🚀 갤러그 게임 🛸",
+        gameSubtitle: "클래식 아케이드 스타일의 우주 슈팅 게임",
+        backToGameCenter: "← 게임센터",
+        
+        // Controls
+        controlsLabel: "조작법:",
+        controlsText: "화살표 키로 이동 | 스페이스바로 발사 | R키로 재시작",
+        mobileHint: "모바일: 화면 터치로 조작",
+        fireButton: "발사",
+        restartButton: "재시작",
+        
+        // Game screens
+        startTitle: "🛸 갤러그 게임 🛸",
+        startDescription: "적 우주선을 모두 격파하세요!",
+        startInstructions: "화살표 키로 이동, 스페이스바로 발사",
+        gameStartButton: "게임 시작",
+        viewRecordsButton: "기록 보기",
+        
+        // Game over screen
+        gameOverTitle: "게임 종료",
+        gameOverScore: "점수",
+        gameOverTime: "플레이 시간",
+        gameOverEnemiesKilled: "격파한 적",
+        gameOverAccuracy: "명중률",
+        gameOverStage: "스테이지",
+        playerNameLabel: "플레이어 이름",
+        saveRecordButton: "기록 저장",
+        
+        // Records screen
+        recordsTitle: "랭킹 보드",
+        topRankings: "TOP 10 랭킹",
+        overallStats: "전체 통계",
+        gamesPlayed: "플레이 횟수",
+        bestScore: "최고 점수",
+        totalTime: "총 플레이 시간",
+        averageAccuracy: "평균 명중률",
+        recentScores: "최근 기록",
+        clearRecordsButton: "기록 초기화",
+        closeButton: "닫기",
+        
+        // In-game UI
+        scoreLabel: "SCORE",
+        stageLabel: "STAGE",
+        
+        // Stage display
+        stageNumber: "스테이지",
+        
+        // Game messages
+        enterNamePlaceholder: "이름을 입력하세요",
+        nameRequired: "이름을 입력해주세요!"
+    },
+    en: {
+        // Header
+        gameTitle: "🚀 Galaga Game 🛸",
+        gameSubtitle: "Classic Arcade Style Space Shooting Game",
+        backToGameCenter: "← Game Center",
+        
+        // Controls
+        controlsLabel: "Controls:",
+        controlsText: "Arrow keys to move | Spacebar to fire | R key to restart",
+        mobileHint: "Mobile: Touch to control",
+        fireButton: "Fire",
+        restartButton: "Restart",
+        
+        // Game screens
+        startTitle: "🛸 Galaga Game 🛸",
+        startDescription: "Defeat all enemy spaceships!",
+        startInstructions: "Arrow keys to move, Spacebar to fire",
+        gameStartButton: "Start Game",
+        viewRecordsButton: "View Records",
+        
+        // Game over screen
+        gameOverTitle: "Game Over",
+        gameOverScore: "Score",
+        gameOverTime: "Play Time",
+        gameOverEnemiesKilled: "Enemies Killed",
+        gameOverAccuracy: "Accuracy",
+        gameOverStage: "Stage",
+        playerNameLabel: "Player Name",
+        saveRecordButton: "Save Record",
+        
+        // Records screen
+        recordsTitle: "Ranking Board",
+        topRankings: "TOP 10 Rankings",
+        overallStats: "Overall Statistics",
+        gamesPlayed: "Games Played",
+        bestScore: "Best Score",
+        totalTime: "Total Play Time",
+        averageAccuracy: "Average Accuracy",
+        recentScores: "Recent Scores",
+        clearRecordsButton: "Clear Records",
+        closeButton: "Close",
+        
+        // In-game UI
+        scoreLabel: "SCORE",
+        stageLabel: "STAGE",
+        
+        // Stage display
+        stageNumber: "Stage",
+        
+        // Game messages
+        enterNamePlaceholder: "Enter your name",
+        nameRequired: "Please enter your name!"
+    }
+};
+
+// Get language from URL parameter or localStorage
+function getLanguage() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const langFromUrl = urlParams.get('lang');
+    if (langFromUrl && galagaTranslations[langFromUrl]) {
+        return langFromUrl;
+    }
+    return localStorage.getItem('language') || 
+           (navigator.language.startsWith('ko') ? 'ko' : 'en');
+}
+
+// Current language for Galaga game
+let currentGameLanguage = getLanguage();
+
+// Translation function for Galaga
+function gt(key) {
+    return galagaTranslations[currentGameLanguage]?.[key] || key;
+}
+
+// Update Galaga game language
+function updateGalagaLanguage() {
+    // Update HTML elements with data-i18n attributes
+    document.querySelectorAll('[data-i18n]').forEach(element => {
+        const key = element.getAttribute('data-i18n');
+        element.textContent = gt(key);
+    });
+    
+    // Update input placeholder
+    const playerNameInput = document.getElementById('playerName');
+    if (playerNameInput) {
+        playerNameInput.placeholder = gt('enterNamePlaceholder');
+    }
+    
+    // Update aria-labels
+    const backBtn = document.querySelector('.back-btn');
+    if (backBtn) {
+        backBtn.setAttribute('aria-label', 
+            currentGameLanguage === 'ko' ? '메인 페이지로 돌아가기' : 'Back to main page');
+    }
+    
+    // Update canvas aria-label
+    const canvas = document.getElementById('gameCanvas');
+    if (canvas) {
+        canvas.setAttribute('aria-label', 
+            currentGameLanguage === 'ko' ? '갤러그 게임 캔버스' : 'Galaga game canvas');
+    }
+    
+    // Update section aria-labels
+    const gameSection = document.getElementById('game-section');
+    if (gameSection) {
+        gameSection.setAttribute('aria-label', 
+            currentGameLanguage === 'ko' ? '게임 플레이 영역' : 'Game play area');
+    }
+    
+    const controlsSection = document.getElementById('controls-section');
+    if (controlsSection) {
+        controlsSection.setAttribute('aria-label', 
+            currentGameLanguage === 'ko' ? '게임 조작법' : 'Game controls');
+    }
+    
+    const mobileControls = document.getElementById('mobile-controls');
+    if (mobileControls) {
+        mobileControls.setAttribute('aria-label', 
+            currentGameLanguage === 'ko' ? '모바일 터치 컨트롤' : 'Mobile touch controls');
+    }
+    
+    // Update document title
+    document.title = currentGameLanguage === 'ko' 
+        ? '갤러그 게임 - 온라인 무료 우주 슈팅 게임 | Oraksil'
+        : 'Galaga Game - Free Online Space Shooting Game | Oraksil';
+}
+
 class Game {
     constructor() {
         this.canvas = document.getElementById('gameCanvas');
@@ -47,6 +229,9 @@ class Game {
     }
     
     init() {
+        // Initialize internationalization
+        updateGalagaLanguage();
+        
         this.setupEventListeners();
         this.player = new Player(this.width / 2, this.height - 60);
         this.displayRecords();
