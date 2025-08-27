@@ -206,7 +206,26 @@ class ArkanoidGame {
         // 마우스 이벤트
         this.canvas.addEventListener('mousemove', (e) => {
             const rect = this.canvas.getBoundingClientRect();
-            this.mouseX = (e.clientX - rect.left) * (this.canvas.width / rect.width);
+            // 캔버스 크기와 실제 표시 크기의 비율 계산
+            const scaleX = this.canvas.width / rect.width;
+            const scaleY = this.canvas.height / rect.height;
+            
+            // 마우스 위치를 캔버스 좌표로 변환
+            this.mouseX = (e.clientX - rect.left) * scaleX;
+            
+            // 경계 확인
+            this.mouseX = Math.max(0, Math.min(this.mouseX, this.width));
+        });
+        
+        // 터치 이벤트도 추가 (모바일 지원)
+        this.canvas.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            if (e.touches.length > 0) {
+                const rect = this.canvas.getBoundingClientRect();
+                const scaleX = this.canvas.width / rect.width;
+                this.mouseX = (e.touches[0].clientX - rect.left) * scaleX;
+                this.mouseX = Math.max(0, Math.min(this.mouseX, this.width));
+            }
         });
         
         // 윈도우 크기 변경 이벤트
@@ -376,6 +395,9 @@ class ArkanoidGame {
     initializeGame() {
         // 패들 생성
         this.paddle = new Paddle(this.width / 2 - 50, this.height - 40, 100, 15);
+        
+        // 패들의 마우스 위치 초기화
+        this.mouseX = this.width / 2;
         
         // 볼 생성
         this.ball = new Ball(this.width / 2, this.height - 60, 8, -300, -300);
@@ -655,8 +677,16 @@ class ArkanoidGame {
     }
     
     gameLoop(currentTime = 0) {
-        const deltaTime = currentTime - this.lastTime;
+        let deltaTime = currentTime - this.lastTime;
         this.lastTime = currentTime;
+        
+        // deltaTime 제한 (최대 33ms = 30fps 최소 보장)
+        deltaTime = Math.min(deltaTime, 33);
+        
+        // 게임이 처음 시작될 때 큰 deltaTime 방지
+        if (deltaTime > 100) {
+            deltaTime = 16; // 60fps 기준
+        }
         
         this.update(deltaTime);
         this.render();
@@ -676,22 +706,41 @@ class Paddle {
         this.speed = 500;
         this.originalWidth = width;
         this.expandTimer = 0;
+        this.targetX = x; // 목표 위치 추가
+        this.smoothFactor = 0.15; // 부드러운 움직임을 위한 보간 계수
     }
     
     update(deltaTime, keys, mouseX) {
+        let moved = false;
+        
         // 키보드 입력
         if (keys['ArrowLeft'] && this.x > 0) {
             this.x -= this.speed * deltaTime / 1000;
+            this.targetX = this.x; // 키보드로 움직일 때는 목표 위치 동기화
+            moved = true;
         }
         if (keys['ArrowRight'] && this.x < game.width - this.width) {
             this.x += this.speed * deltaTime / 1000;
+            this.targetX = this.x; // 키보드로 움직일 때는 목표 위치 동기화
+            moved = true;
         }
         
         // 마우스 입력 (키보드 입력이 없을 때)
-        if (!keys['ArrowLeft'] && !keys['ArrowRight']) {
-            const targetX = mouseX - this.width / 2;
-            this.x = Math.max(0, Math.min(targetX, game.width - this.width));
+        if (!moved && mouseX !== undefined) {
+            this.targetX = mouseX - this.width / 2;
+            this.targetX = Math.max(0, Math.min(this.targetX, game.width - this.width));
+            
+            // 부드러운 보간을 사용하여 목표 위치로 이동
+            const distance = this.targetX - this.x;
+            if (Math.abs(distance) > 1) { // 1픽셀 이하의 차이는 무시
+                this.x += distance * this.smoothFactor;
+            } else {
+                this.x = this.targetX; // 거의 도달했으면 정확한 위치로 설정
+            }
         }
+        
+        // 경계 확인 (안전장치)
+        this.x = Math.max(0, Math.min(this.x, game.width - this.width));
         
         // 확장 효과 타이머
         if (this.expandTimer > 0) {
