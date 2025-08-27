@@ -246,14 +246,13 @@
         #mobile-controls {
             display: none;
             position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(10px);
-            border-top: 2px solid #ff6b6b;
-            padding: 15px;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            background: transparent; /* 배경 제거 */
+            padding: 0;
             z-index: 1000;
+            pointer-events: none; /* 컨트롤러 영역 자체는 터치 이벤트 통과 */
         }
 
         .mobile-controller {
@@ -275,10 +274,10 @@
         .control-btn {
             width: 80px;
             height: 60px;
-            background: rgba(255, 107, 107, 0.2);
-            border: 2px solid #ff6b6b;
+            background: rgba(255, 107, 107, 0.15);
+            border: 2px solid rgba(255, 107, 107, 0.4);
             border-radius: 10px;
-            color: #ff6b6b;
+            color: rgba(255, 107, 107, 0.8);
             font-size: 16px;
             font-weight: bold;
             cursor: pointer;
@@ -289,13 +288,16 @@
             user-select: none;
             -webkit-user-select: none;
             -webkit-tap-highlight-color: transparent;
+            pointer-events: auto; /* 버튼은 터치 이벤트 허용 */
         }
 
         .control-btn:active,
         .control-btn.pressed {
-            background: rgba(255, 107, 107, 0.6);
+            background: rgba(255, 107, 107, 0.4);
+            border-color: rgba(255, 107, 107, 0.8);
+            color: rgba(255, 107, 107, 1);
             transform: scale(0.95);
-            box-shadow: 0 0 15px rgba(255, 107, 107, 0.8);
+            box-shadow: 0 0 15px rgba(255, 107, 107, 0.6);
         }
 
         .action-controls {
@@ -306,10 +308,10 @@
         .action-btn {
             width: 60px;
             height: 60px;
-            background: rgba(255, 255, 100, 0.2);
-            border: 2px solid #ffff64;
+            background: rgba(255, 255, 100, 0.15);
+            border: 2px solid rgba(255, 255, 100, 0.4);
             border-radius: 50%;
-            color: #ffff64;
+            color: rgba(255, 255, 100, 0.8);
             font-size: 12px;
             font-weight: bold;
             cursor: pointer;
@@ -321,11 +323,14 @@
             user-select: none;
             -webkit-user-select: none;
             -webkit-tap-highlight-color: transparent;
+            pointer-events: auto; /* 버튼은 터치 이벤트 허용 */
         }
 
         .action-btn:active,
         .action-btn.pressed {
-            background: rgba(255, 255, 100, 0.6);
+            background: rgba(255, 255, 100, 0.4);
+            border-color: rgba(255, 255, 100, 0.8);
+            color: rgba(255, 255, 100, 1);
             transform: scale(0.9);
             box-shadow: 0 0 15px currentColor;
         }
@@ -337,13 +342,12 @@
             }
 
             body {
-                padding-bottom: 120px;
                 padding-top: 80px;
             }
 
             #gameCanvas {
                 max-width: calc(100vw - 40px);
-                max-height: calc(100vh - 280px);
+                max-height: calc(100vh - 160px);
                 width: auto;
                 height: auto;
             }
@@ -398,7 +402,7 @@
             }
 
             body {
-                padding-bottom: 100px;
+                padding-top: 70px;
             }
 
             h1 {

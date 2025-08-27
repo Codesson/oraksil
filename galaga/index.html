@@ -514,14 +514,13 @@
         #mobile-controls {
             display: none; /* Hidden by default, shown on mobile */
             position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(10px);
-            border-top: 2px solid #00ffff;
-            padding: 15px;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            background: transparent; /* 배경 제거 */
+            padding: 0;
             z-index: 1000;
+            pointer-events: none; /* 컨트롤러 영역 자체는 터치 이벤트 통과 */
         }
 
         .mobile-controller {
@@ -550,10 +549,10 @@
         }
 
         .dpad-btn {
-            background: rgba(0, 255, 255, 0.2);
-            border: 2px solid #00ffff;
+            background: rgba(0, 255, 255, 0.15);
+            border: 2px solid rgba(0, 255, 255, 0.4);
             border-radius: 8px;
-            color: #00ffff;
+            color: rgba(0, 255, 255, 0.8);
             font-size: 20px;
             font-weight: bold;
             cursor: pointer;
@@ -564,6 +563,7 @@
             user-select: none;
             -webkit-user-select: none;
             -webkit-tap-highlight-color: transparent;
+            pointer-events: auto; /* 버튼은 터치 이벤트 허용 */
         }
 
         .dpad-up {
@@ -593,9 +593,11 @@
 
         .dpad-btn:active,
         .dpad-btn.pressed {
-            background: rgba(0, 255, 255, 0.6);
+            background: rgba(0, 255, 255, 0.4);
+            border-color: rgba(0, 255, 255, 0.8);
+            color: rgba(0, 255, 255, 1);
             transform: scale(0.95);
-            box-shadow: 0 0 15px rgba(0, 255, 255, 0.8);
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.6);
         }
 
         /* Action Controls */
@@ -609,10 +611,10 @@
         .action-btn {
             width: 70px;
             height: 70px;
-            background: rgba(255, 100, 100, 0.2);
-            border: 2px solid #ff6464;
+            background: rgba(255, 100, 100, 0.15);
+            border: 2px solid rgba(255, 100, 100, 0.4);
             border-radius: 50%;
-            color: #ff6464;
+            color: rgba(255, 100, 100, 0.8);
             font-size: 14px;
             font-weight: bold;
             cursor: pointer;
@@ -624,6 +626,7 @@
             user-select: none;
             -webkit-user-select: none;
             -webkit-tap-highlight-color: transparent;
+            pointer-events: auto; /* 버튼은 터치 이벤트 허용 */
         }
 
         .action-btn span {
@@ -632,15 +635,15 @@
         }
 
         .fire-btn {
-            background: rgba(255, 100, 100, 0.2);
-            border-color: #ff6464;
-            color: #ff6464;
+            background: rgba(255, 100, 100, 0.15);
+            border-color: rgba(255, 100, 100, 0.4);
+            color: rgba(255, 100, 100, 0.8);
         }
 
         .restart-btn {
-            background: rgba(255, 255, 100, 0.2);
-            border-color: #ffff64;
-            color: #ffff64;
+            background: rgba(255, 255, 100, 0.15);
+            border-color: rgba(255, 255, 100, 0.4);
+            color: rgba(255, 255, 100, 0.8);
         }
 
         .action-btn:active,
@@ -651,12 +654,16 @@
 
         .fire-btn:active,
         .fire-btn.pressed {
-            background: rgba(255, 100, 100, 0.6);
+            background: rgba(255, 100, 100, 0.4);
+            border-color: rgba(255, 100, 100, 0.8);
+            color: rgba(255, 100, 100, 1);
         }
 
         .restart-btn:active,
         .restart-btn.pressed {
-            background: rgba(255, 255, 100, 0.6);
+            background: rgba(255, 255, 100, 0.4);
+            border-color: rgba(255, 255, 100, 0.8);
+            color: rgba(255, 255, 100, 1);
         }
 
         /* Mobile Responsive Layout */
@@ -666,13 +673,12 @@
             }
 
             body {
-                padding-bottom: 160px; /* Space for mobile controls */
                 padding-top: 80px; /* Space for navigation */
             }
 
             #gameCanvas {
                 max-width: 100vw;
-                max-height: calc(100vh - 240px);
+                max-height: calc(100vh - 80px);
                 width: auto;
                 height: auto;
             }
