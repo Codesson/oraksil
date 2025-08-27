@@ -434,19 +434,21 @@
                     <button class="play-button" onclick="playGame('galaga')">게임 시작</button>
                 </div>
 
-                <!-- Coming Soon Games -->
-                <div class="game-card coming-soon">
-                    <div class="game-icon">🎯</div>
-                    <h3 class="game-title">아르카노이드</h3>
-                    <p class="game-description">벽돌을 깨며 점수를 얻는 클래식 아케이드 게임입니다.</p>
+                <!-- Arkanoid Game -->
+                <div class="game-card" data-game="arkanoid">
+                    <div class="game-icon">🧱</div>
+                    <h3 class="game-title">벽돌깨기</h3>
+                    <p class="game-description">패들로 공을 튕겨서 모든 벽돌을 깨뜨리는 클래식 아케이드 게임입니다.</p>
                     <ul class="game-features">
                         <li>다양한 파워업 아이템</li>
                         <li>물리 기반 볼 움직임</li>
                         <li>여러 레벨 구성</li>
-                        <li>특수 벽돌 효과</li>
+                        <li>모바일 터치 컨트롤 지원</li>
                     </ul>
-                    <button class="play-button" disabled>출시 예정</button>
+                    <button class="play-button" onclick="playGame('arkanoid')">게임 시작</button>
                 </div>
+
+                <!-- Coming Soon Games -->
 
                 <div class="game-card coming-soon">
                     <div class="game-icon">👻</div>
@@ -539,14 +541,14 @@
                 ],
                 playButton: "게임 시작",
                 
-                // Coming soon games
-                arkanoidTitle: "아르카노이드",
-                arkanoidDescription: "벽돌을 깨며 점수를 얻는 클래식 아케이드 게임입니다.",
+                // Arkanoid game (now available)
+                arkanoidTitle: "벽돌깨기",
+                arkanoidDescription: "패들로 공을 튕겨서 모든 벽돌을 깨뜨리는 클래식 아케이드 게임입니다.",
                 arkanoidFeatures: [
                     "다양한 파워업 아이템",
                     "물리 기반 볼 움직임",
                     "여러 레벨 구성",
-                    "특수 벽돌 효과"
+                    "모바일 터치 컨트롤 지원"
                 ],
                 
                 pacmanTitle: "팩맨",
@@ -612,14 +614,14 @@
                 ],
                 playButton: "Start Game",
                 
-                // Coming soon games
-                arkanoidTitle: "Arkanoid",
-                arkanoidDescription: "A classic arcade game where you break bricks to earn points.",
+                // Arkanoid game (now available)
+                arkanoidTitle: "Brick Breaker",
+                arkanoidDescription: "Control the paddle to bounce the ball and break all the bricks in this classic arcade game.",
                 arkanoidFeatures: [
                     "Various power-up items",
                     "Physics-based ball movement",
                     "Multiple level configurations",
-                    "Special brick effects"
+                    "Mobile touch control support"
                 ],
                 
                 pacmanTitle: "Pac-Man",
@@ -714,9 +716,26 @@
                 galagaCard.querySelector('.play-button').textContent = t('playButton');
             }
             
+            // Update arkanoid game
+            const arkanoidCard = document.querySelector('[data-game="arkanoid"]');
+            if (arkanoidCard) {
+                arkanoidCard.querySelector('.game-title').textContent = t('arkanoidTitle');
+                arkanoidCard.querySelector('.game-description').textContent = t('arkanoidDescription');
+                
+                const arkanoidFeatures = arkanoidCard.querySelectorAll('.game-features li');
+                const arkanoidFeatureTexts = t('arkanoidFeatures');
+                arkanoidFeatures.forEach((li, index) => {
+                    if (arkanoidFeatureTexts[index]) {
+                        li.textContent = arkanoidFeatureTexts[index];
+                    }
+                });
+                
+                arkanoidCard.querySelector('.play-button').textContent = t('playButton');
+            }
+            
             // Update coming soon games
             const comingSoonCards = document.querySelectorAll('.coming-soon');
-            const gameKeys = ['arkanoid', 'pacman', 'snake', 'pong', 'tetris'];
+            const gameKeys = ['pacman', 'snake', 'pong', 'tetris'];
             
             comingSoonCards.forEach((card, index) => {
                 if (gameKeys[index]) {
@@ -780,6 +799,10 @@
                 case 'galaga':
                     // Pass language parameter to galaga game
                     window.location.href = `./galaga/index.html?lang=${currentLanguage}`;
+                    break;
+                case 'arkanoid':
+                    // Pass language parameter to arkanoid game
+                    window.location.href = `./arkanoid/index.html?lang=${currentLanguage}`;
                     break;
                 default:
                     alert(t('comingSoonAlert'));

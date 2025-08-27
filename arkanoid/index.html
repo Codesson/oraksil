@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <!-- Primary Meta Tags -->
+    <title>벽돌깨기 게임 - 온라인 무료 아케이드 게임 | Oraksil</title>
+    <meta name="title" content="벽돌깨기 게임 - 온라인 무료 아케이드 게임 | Oraksil">
+    <meta name="description" content="클래식 아르카노이드 스타일의 벽돌깨기 게임! 패들로 공을 튕겨서 모든 벽돌을 깨뜨리세요. 다양한 파워업과 레벨을 즐기세요.">
+    <meta name="keywords" content="벽돌깨기, 아르카노이드, 아케이드게임, 온라인게임, 무료게임, 레트로게임, Arkanoid, brick breaker">
+    <meta name="author" content="Oraksil">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="Korean">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://oraksil-fgsefp1zz-codessons-projects.vercel.app/arkanoid/">
+    <meta property="og:title" content="벽돌깨기 게임 - 온라인 무료 아케이드 게임">
+    <meta property="og:description" content="클래식 아르카노이드 스타일의 벽돌깨기 게임! 패들로 공을 튕겨서 모든 벽돌을 깨뜨리세요.">
+    <meta property="og:image" content="https://oraksil-fgsefp1zz-codessons-projects.vercel.app/og-image.jpg">
+    <meta property="og:site_name" content="Oraksil 게임센터">
+    <meta property="og:locale" content="ko_KR">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://oraksil-fgsefp1zz-codessons-projects.vercel.app/arkanoid/">
+    <meta property="twitter:title" content="벽돌깨기 게임 - 온라인 무료 아케이드 게임">
+    <meta property="twitter:description" content="클래식 아르카노이드 스타일의 벽돌깨기 게임! 패들로 공을 튕겨서 모든 벽돌을 깨뜨리세요.">
+    <meta property="twitter:image" content="https://oraksil-fgsefp1zz-codessons-projects.vercel.app/og-image.jpg">
+    
+    <!-- Additional SEO -->
+    <link rel="canonical" href="https://oraksil-fgsefp1zz-codessons-projects.vercel.app/arkanoid/">
+    <meta name="theme-color" content="#ff6b6b">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', 'Helvetica', sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            color: #fff;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Game Navigation */
+        .game-nav {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .back-btn {
+            background: rgba(255, 107, 107, 0.2);
+            border: 2px solid #ff6b6b;
+            color: #ff6b6b;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 107, 107, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);
+        }
+
+        .nav-spacer {
+            flex: 1;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            padding: 40px 20px 20px;
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            position: relative;
+            width: 100%;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ff6b6b, #ffd93d, #6bcf7f, #4d9de0);
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 3s ease-in-out infinite;
+            margin-bottom: 10px;
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            opacity: 0.9;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Game Container */
+        .game-container {
+            position: relative;
+            margin: 20px 0;
+        }
+
+        #gameCanvas {
+            border: 3px solid #fff;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            background: #000;
+        }
+
+        /* Controls */
+        .controls {
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+
+        .mobile-hint {
+            font-size: 0.9em;
+            color: #aaa;
+            font-style: italic;
+        }
+
+        /* Game Screens */
+        .game-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 10;
+        }
+
+        .start-screen {
+            background: rgba(0, 20, 40, 0.95);
+        }
+
+        .game-over {
+            background: rgba(40, 0, 0, 0.95);
+        }
+
+        .level-complete {
+            background: rgba(0, 40, 0, 0.95);
+        }
+
+        .screen-title {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .screen-text {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            text-align: center;
+            opacity: 0.9;
+        }
+
+        .game-btn {
+            background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+            border: none;
+            border-radius: 25px;
+            color: white;
+            font-size: 1.2rem;
+            font-weight: bold;
+            padding: 15px 30px;
+            margin: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+        }
+
+        .game-btn:hover {
+            background: linear-gradient(45deg, #ff5252, #ff7979);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+        }
+
+        .game-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Stats */
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            min-width: 400px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #ffd93d;
+        }
+
+        /* Mobile Controls */
+        #mobile-controls {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            border-top: 2px solid #ff6b6b;
+            padding: 15px;
+            z-index: 1000;
+        }
+
+        .mobile-controller {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 600px;
+            margin: 0 auto;
+            height: 80px;
+        }
+
+        .paddle-controls {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .control-btn {
+            width: 80px;
+            height: 60px;
+            background: rgba(255, 107, 107, 0.2);
+            border: 2px solid #ff6b6b;
+            border-radius: 10px;
+            color: #ff6b6b;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.1s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .control-btn:active,
+        .control-btn.pressed {
+            background: rgba(255, 107, 107, 0.6);
+            transform: scale(0.95);
+            box-shadow: 0 0 15px rgba(255, 107, 107, 0.8);
+        }
+
+        .action-controls {
+            display: flex;
+            gap: 15px;
+        }
+
+        .action-btn {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 100, 0.2);
+            border: 2px solid #ffff64;
+            border-radius: 50%;
+            color: #ffff64;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.1s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .action-btn:active,
+        .action-btn.pressed {
+            background: rgba(255, 255, 100, 0.6);
+            transform: scale(0.9);
+            box-shadow: 0 0 15px currentColor;
+        }
+
+        /* Mobile Responsive Layout */
+        @media (max-width: 768px) {
+            #mobile-controls {
+                display: block;
+            }
+
+            body {
+                padding-bottom: 120px;
+                padding-top: 80px;
+            }
+
+            #gameCanvas {
+                max-width: calc(100vw - 40px);
+                max-height: calc(100vh - 280px);
+                width: auto;
+                height: auto;
+            }
+
+            .game-nav {
+                position: fixed;
+                top: 10px;
+                left: 10px;
+                right: 10px;
+                background: rgba(0, 0, 0, 0.8);
+                backdrop-filter: blur(15px);
+                border-radius: 15px;
+                padding: 10px 15px;
+            }
+
+            .back-btn {
+                padding: 8px 15px;
+                font-size: 0.9em;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .stats {
+                min-width: auto;
+                width: calc(100vw - 40px);
+                margin: 10px 20px;
+            }
+
+            .controls {
+                margin: 10px 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .mobile-controller {
+                height: 70px;
+                padding: 10px 0;
+            }
+
+            .control-btn {
+                width: 70px;
+                height: 50px;
+                font-size: 14px;
+            }
+
+            .action-btn {
+                width: 50px;
+                height: 50px;
+                font-size: 10px;
+            }
+
+            body {
+                padding-bottom: 100px;
+            }
+
+            h1 {
+                font-size: 1.7rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="game-nav">
+            <a href="../index.html" class="back-btn" data-i18n="backToGameCenter" aria-label="메인 페이지로 돌아가기">
+                ← 게임센터
+            </a>
+            <span class="nav-spacer"></span>
+        </nav>
+        <h1 data-i18n="gameTitle">🧱 벽돌깨기 🧱</h1>
+        <p class="subtitle" data-i18n="gameSubtitle">클래식 아르카노이드 스타일의 블록 브레이커</p>
+    </header>
+    
+    <main>
+        <div class="game-container">
+            <canvas id="gameCanvas" width="800" height="600" role="application" aria-label="벽돌깨기 게임 캔버스"></canvas>
+            
+            <!-- Start Screen -->
+            <div class="game-screen start-screen" id="startScreen">
+                <h2 class="screen-title" data-i18n="startTitle">🧱 벽돌깨기 🧱</h2>
+                <p class="screen-text" data-i18n="startDescription">패들을 조작해서 모든 벽돌을 깨뜨리세요!</p>
+                <p class="screen-text" data-i18n="startInstructions">마우스 또는 화살표 키로 패들 이동</p>
+                <button class="game-btn" onclick="game.start()" data-i18n="gameStartButton">게임 시작</button>
+            </div>
+
+            <!-- Game Over Screen -->
+            <div class="game-screen game-over" id="gameOver" style="display: none;">
+                <h2 class="screen-title" data-i18n="gameOverTitle">게임 종료</h2>
+                <div class="stats">
+                    <div class="stat-item">
+                        <div class="stat-label" data-i18n="finalScore">최종 점수</div>
+                        <div class="stat-value" id="finalScore">0</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label" data-i18n="reachedLevel">도달 레벨</div>
+                        <div class="stat-value" id="reachedLevel">1</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label" data-i18n="bricksDestroyed">깨뜨린 벽돌</div>
+                        <div class="stat-value" id="bricksDestroyed">0</div>
+                    </div>
+                </div>
+                <button class="game-btn" onclick="game.restart()" data-i18n="restartButton">다시 시작</button>
+            </div>
+
+            <!-- Level Complete Screen -->
+            <div class="game-screen level-complete" id="levelComplete" style="display: none;">
+                <h2 class="screen-title" data-i18n="levelCompleteTitle">레벨 완료!</h2>
+                <p class="screen-text" data-i18n="levelCompleteText">축하합니다! 다음 레벨로 진행합니다.</p>
+                <div class="stats">
+                    <div class="stat-item">
+                        <div class="stat-label" data-i18n="currentScore">현재 점수</div>
+                        <div class="stat-value" id="currentScore">0</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label" data-i18n="nextLevel">다음 레벨</div>
+                        <div class="stat-value" id="nextLevel">2</div>
+                    </div>
+                </div>
+                <button class="game-btn" onclick="game.nextLevel()" data-i18n="continueButton">계속하기</button>
+            </div>
+        </div>
+
+        <div class="controls">
+            <strong data-i18n="controlsLabel">조작법:</strong> 
+            <span data-i18n="controlsText">마우스 또는 화살표 키로 패들 이동 | 스페이스바로 일시정지</span>
+            <br><span class="mobile-hint" data-i18n="mobileHint">모바일: 화면 터치로 조작</span>
+        </div>
+
+        <!-- Mobile Touch Controls -->
+        <div id="mobile-controls" aria-label="모바일 터치 컨트롤">
+            <div class="mobile-controller">
+                <!-- Paddle Controls -->
+                <div class="paddle-controls">
+                    <button class="control-btn" data-key="ArrowLeft" aria-label="왼쪽으로 이동">
+                        ← 왼쪽
+                    </button>
+                    <button class="control-btn" data-key="ArrowRight" aria-label="오른쪽으로 이동">
+                        오른쪽 →
+                    </button>
+                </div>
+
+                <!-- Action Controls -->
+                <div class="action-controls">
+                    <button class="action-btn" data-key="Space" aria-label="일시정지">
+                        ⏸️<br><span data-i18n="pauseButton">일시정지</span>
+                    </button>
+                    <button class="action-btn" data-key="KeyR" aria-label="재시작">
+                        🔄<br><span data-i18n="restartButton">재시작</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="game.js"></script>
+</body>
+</html>
