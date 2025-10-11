@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-1WWECYQ6X8"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-1WWECYQ6X8');
+    </script>
+    
+    <!-- Primary Meta Tags -->
+    <title>👻 팩맨 게임 무료 플레이 | 클래식 미로 게임</title>
+    <meta name="title" content="👻 팩맨 게임 무료 플레이 | 클래식 미로 게임">
+    <meta name="description" content="👻 클래식 팩맨 미로 게임을 무료로 플레이하세요! 점을 먹고 유령을 피하며 최고 점수에 도전하세요. 모바일 지원, 한국어/영어 지원.">
+    <meta name="keywords" content="팩맨 게임, pacman 게임, 미로 게임, 클래식 게임, 무료 게임, 아케이드 게임, 팩맨 온라인, 모바일 팩맨">
+    <meta name="author" content="Oraksil">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://oraksil-kickx31e9-codessons-projects.vercel.app/pacman/">
+    <meta property="og:title" content="👻 팩맨 게임 무료 플레이 | 클래식 미로 게임">
+    <meta property="og:description" content="👻 클래식 팩맨 미로 게임을 무료로 플레이하세요! 점을 먹고 유령을 피하며 최고 점수에 도전하세요.">
+    <meta property="og:image" content="https://oraksil-kickx31e9-codessons-projects.vercel.app/og-image.jpg">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://oraksil-kickx31e9-codessons-projects.vercel.app/pacman/">
+    <meta property="twitter:title" content="👻 팩맨 게임 무료 플레이 | 클래식 미로 게임">
+    <meta property="twitter:description" content="👻 클래식 팩맨 미로 게임을 무료로 플레이하세요! 점을 먹고 유령을 피하며 최고 점수에 도전하세요.">
+    <meta property="twitter:image" content="https://oraksil-kickx31e9-codessons-projects.vercel.app/og-image.jpg">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', 'Helvetica', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            color: #fff;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .game-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ffd93d, #ff6b6b, #4d9de0, #6bcf7f);
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 3s ease-in-out infinite;
+            margin-bottom: 10px;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .game-subtitle {
+            font-size: 1rem;
+            opacity: 0.8;
+            margin-bottom: 15px;
+        }
+
+        /* Game Section */
+        .game-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        #gameCanvas {
+            border: 3px solid #ffd93d;
+            border-radius: 10px;
+            background: #000;
+            box-shadow: 0 0 30px rgba(255, 217, 61, 0.3);
+        }
+
+        /* Controls Section */
+        .controls-section {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            max-width: 800px;
+            width: 100%;
+        }
+
+        .controls-label {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #ffd93d;
+        }
+
+        .controls-text {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+
+        .mobile-hint {
+            font-size: 0.8rem;
+            color: #6bcf7f;
+            margin-top: 10px;
+        }
+
+        /* Mobile Controls */
+        .mobile-controls {
+            display: none;
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-rows: 1fr 1fr 1fr;
+            gap: 10px;
+            max-width: 300px;
+            margin: 20px auto 0;
+        }
+
+        .mobile-controls.show {
+            display: grid;
+        }
+
+        .control-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            backdrop-filter: blur(10px);
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .control-btn:active,
+        .control-btn.pressed {
+            background: rgba(255, 217, 61, 0.3);
+            border-color: #ffd93d;
+            transform: scale(0.95);
+        }
+
+        .control-btn.up {
+            grid-column: 2;
+            grid-row: 1;
+        }
+
+        .control-btn.left {
+            grid-column: 1;
+            grid-row: 2;
+        }
+
+        .control-btn.down {
+            grid-column: 2;
+            grid-row: 3;
+        }
+
+        .control-btn.right {
+            grid-column: 3;
+            grid-row: 2;
+        }
+
+        /* Game Screens */
+        .game-screen {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.9);
+            border: 3px solid #ffd93d;
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            min-width: 400px;
+            backdrop-filter: blur(15px);
+            display: none;
+        }
+
+        .game-screen.show {
+            display: block;
+        }
+
+        .screen-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #ffd93d, #ff6b6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .screen-description {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            opacity: 0.8;
+        }
+
+        .screen-instructions {
+            font-size: 1rem;
+            margin-bottom: 30px;
+            opacity: 0.7;
+            line-height: 1.4;
+        }
+
+        .game-button {
+            background: linear-gradient(45deg, #ffd93d, #ff6b6b);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 1.2rem;
+            font-weight: bold;
+            padding: 15px 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px;
+            box-shadow: 0 4px 15px rgba(255, 217, 61, 0.3);
+        }
+
+        .game-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 217, 61, 0.4);
+        }
+
+        .game-button:active {
+            transform: translateY(0);
+        }
+
+        .game-button.secondary {
+            background: linear-gradient(45deg, #4d9de0, #6bcf7f);
+            box-shadow: 0 4px 15px rgba(77, 157, 224, 0.3);
+        }
+
+        .game-button.secondary:hover {
+            box-shadow: 0 6px 20px rgba(77, 157, 224, 0.4);
+        }
+
+        /* Game Over Screen */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .stat-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 8px;
+            border-left: 4px solid #ffd93d;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #ffd93d;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .header {
+                padding: 15px;
+                margin-bottom: 15px;
+            }
+
+            .game-title {
+                font-size: 2rem;
+            }
+
+            .game-subtitle {
+                font-size: 0.9rem;
+            }
+
+            .back-btn {
+                top: 15px;
+                left: 15px;
+                padding: 8px 16px;
+                font-size: 0.8rem;
+            }
+
+            .controls-section {
+                padding: 15px;
+                margin: 0 10px;
+            }
+
+            .game-screen {
+                min-width: 320px;
+                padding: 30px 20px;
+                margin: 0 10px;
+            }
+
+            .screen-title {
+                font-size: 2rem;
+            }
+
+            .screen-description {
+                font-size: 1rem;
+            }
+
+            .mobile-controls.show {
+                display: grid;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .game-title {
+                font-size: 1.5rem;
+            }
+
+            .game-screen {
+                min-width: 280px;
+                padding: 20px 15px;
+            }
+
+            .screen-title {
+                font-size: 1.5rem;
+            }
+
+            .game-button {
+                font-size: 1rem;
+                padding: 12px 24px;
+            }
+        }
+
+        /* Accessibility */
+        @media (prefers-reduced-motion: reduce) {
+            .game-title {
+                animation: none;
+            }
+        }
+
+        /* High contrast mode */
+        @media (prefers-contrast: high) {
+            .game-screen {
+                background: #000;
+                border-color: #fff;
+            }
+            
+            .control-btn {
+                border-color: #fff;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Back Button -->
+    <a href="../index.html" class="back-btn" data-i18n="backToGameCenter">← 게임센터</a>
+
+    <!-- Header -->
+    <div class="header">
+        <h1 class="game-title" data-i18n="gameTitle">👻 팩맨 게임 👻</h1>
+        <p class="game-subtitle" data-i18n="gameSubtitle">클래식 미로 탐험 게임</p>
+    </div>
+
+    <!-- Game Section -->
+    <div class="game-section" id="game-section" aria-label="게임 플레이 영역">
+        <canvas id="gameCanvas" width="570" height="630" aria-label="팩맨 게임 캔버스"></canvas>
+    </div>
+
+    <!-- Controls Section -->
+    <div class="controls-section" id="controls-section" aria-label="게임 조작법">
+        <div class="controls-label" data-i18n="controlsLabel">조작법:</div>
+        <div class="controls-text" data-i18n="controlsText">방향키로 이동 | 스페이스바로 일시정지 | R키로 재시작</div>
+        <div class="mobile-hint" data-i18n="mobileHint">모바일: 화면 터치로 조작</div>
+    </div>
+
+    <!-- Mobile Controls -->
+    <div class="mobile-controls" id="mobile-controls" aria-label="모바일 터치 컨트롤">
+        <div class="control-btn up" data-key="ArrowUp">↑</div>
+        <div class="control-btn left" data-key="ArrowLeft">←</div>
+        <div class="control-btn down" data-key="ArrowDown">↓</div>
+        <div class="control-btn right" data-key="ArrowRight">→</div>
+    </div>
+
+    <!-- Start Screen -->
+    <div class="game-screen" id="startScreen">
+        <h2 class="screen-title" data-i18n="startTitle">👻 팩맨 게임 👻</h2>
+        <p class="screen-description" data-i18n="startDescription">미로를 탐험하며 모든 점을 먹어보세요!</p>
+        <p class="screen-instructions" data-i18n="startInstructions">방향키로 이동, 유령을 피하세요</p>
+        <button class="game-button" onclick="game.start()" data-i18n="gameStartButton">게임 시작</button>
+    </div>
+
+    <!-- Game Over Screen -->
+    <div class="game-screen" id="gameOver">
+        <h2 class="screen-title" data-i18n="gameOverTitle">게임 종료</h2>
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-label" data-i18n="finalScore">최종 점수</div>
+                <div class="stat-value" id="finalScore">0</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label" data-i18n="levelReached">도달 레벨</div>
+                <div class="stat-value" id="levelReached">1</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label" data-i18n="dotsEaten">먹은 점</div>
+                <div class="stat-value" id="dotsEaten">0</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label" data-i18n="ghostsEaten">먹은 유령</div>
+                <div class="stat-value" id="ghostsEaten">0</div>
+            </div>
+        </div>
+        <button class="game-button" onclick="game.restart()" data-i18n="restartButton">다시 시작</button>
+        <button class="game-button secondary" onclick="game.backToStart()" data-i18n="backToMenu">메뉴로</button>
+    </div>
+
+    <!-- Level Complete Screen -->
+    <div class="game-screen" id="levelComplete">
+        <h2 class="screen-title" data-i18n="levelCompleteTitle">레벨 완료!</h2>
+        <p class="screen-description" data-i18n="levelCompleteText">축하합니다! 다음 레벨로 진행합니다.</p>
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-label" data-i18n="currentScore">현재 점수</div>
+                <div class="stat-value" id="currentScore">0</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label" data-i18n="nextLevel">다음 레벨</div>
+                <div class="stat-value" id="nextLevel">2</div>
+            </div>
+        </div>
+        <button class="game-button" onclick="game.nextLevel()" data-i18n="continueButton">계속하기</button>
+    </div>
+
+    <!-- Pause Screen -->
+    <div class="game-screen" id="pauseScreen">
+        <h2 class="screen-title" data-i18n="paused">일시정지</h2>
+        <p class="screen-description" data-i18n="pressSpaceToResume">스페이스바를 눌러 계속하기</p>
+        <button class="game-button" onclick="game.resume()" data-i18n="resumeButton">계속하기</button>
+        <button class="game-button secondary" onclick="game.backToStart()" data-i18n="backToMenu">메뉴로</button>
+    </div>
+
+    <!-- Game Script -->
+    <script src="game.js"></script>
+
+    <script>
+        // Show mobile controls on mobile devices
+        function isMobile() {
+            return window.innerWidth <= 768 || 'ontouchstart' in window;
+        }
+
+        if (isMobile()) {
+            document.getElementById('mobile-controls').classList.add('show');
+        }
+
+        // Update mobile controls visibility on resize
+        window.addEventListener('resize', () => {
+            const mobileControls = document.getElementById('mobile-controls');
+            if (isMobile()) {
+                mobileControls.classList.add('show');
+            } else {
+                mobileControls.classList.remove('show');
+            }
+        });
+    </script>
+</body>
+</html>
+
