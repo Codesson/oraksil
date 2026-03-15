@@ -1,0 +1,12 @@
+{
+  "name": "galaga_game",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "test": "playwright test",
+    "test:snake": "playwright test snake"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.49.0"
+  }
+}

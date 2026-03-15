@@ -514,7 +514,7 @@
                     <button class="play-button" onclick="playGame('cat-memory')">게임 시작</button>
                 </div>
 
-                <div class="game-card coming-soon">
+                <div class="game-card" data-game="snake">
                     <div class="game-icon">🐍</div>
                     <h3 class="game-title">스네이크</h3>
                     <p class="game-description">뱀을 조종해서 먹이를 먹고 성장시키는 중독성 있는 게임입니다.</p>
@@ -524,7 +524,7 @@
                         <li>속도 증가 시스템</li>
                         <li>벽 충돌 감지</li>
                     </ul>
-                    <button class="play-button" disabled>출시 예정</button>
+                    <button class="play-button" onclick="playGame('snake')">게임 시작</button>
                 </div>
 
                 <div class="game-card coming-soon">
@@ -838,9 +838,26 @@
                 catMemoryCard.querySelector('.play-button').textContent = t('playButton');
             }
             
+            // Update snake game
+            const snakeCard = document.querySelector('[data-game="snake"]');
+            if (snakeCard) {
+                snakeCard.querySelector('.game-title').textContent = t('snakeTitle');
+                snakeCard.querySelector('.game-description').textContent = t('snakeDescription');
+                
+                const snakeFeatures = snakeCard.querySelectorAll('.game-features li');
+                const snakeFeatureTexts = t('snakeFeatures');
+                snakeFeatures.forEach((li, index) => {
+                    if (snakeFeatureTexts[index]) {
+                        li.textContent = snakeFeatureTexts[index];
+                    }
+                });
+                
+                snakeCard.querySelector('.play-button').textContent = t('playButton');
+            }
+            
             // Update coming soon games
             const comingSoonCards = document.querySelectorAll('.coming-soon');
-            const gameKeys = ['snake', 'pong', 'tetris'];
+            const gameKeys = ['pong', 'tetris'];
             
             comingSoonCards.forEach((card, index) => {
                 if (gameKeys[index]) {
@@ -925,6 +942,9 @@
                 case 'cat-memory':
                     // Pass language parameter to cat memory game
                     window.location.href = `./cat-memory/index.html?lang=${currentLanguage}`;
+                    break;
+                case 'snake':
+                    window.location.href = `./snake/index.html?lang=${currentLanguage}`;
                     break;
                 default:
                     alert(t('comingSoonAlert'));

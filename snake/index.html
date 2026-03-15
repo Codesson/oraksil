@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>🐍 스네이크 게임 무료 플레이 | Oraksil</title>
+    <meta name="description" content="클래식 스네이크 게임. 먹이를 먹고 뱀을 키우세요. 무료 플레이, 모바일 지원.">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Arial', 'Helvetica', sans-serif;
+            background: linear-gradient(135deg, #0d1b2a 0%, #1b263b 50%, #415a77 100%);
+            min-height: 100vh;
+            color: #fff;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+        }
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .header {
+            text-align: center;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .game-title {
+            font-size: 2rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #6bcf7f, #4d9de0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .score-board {
+            display: flex;
+            gap: 24px;
+            font-size: 1.1rem;
+        }
+        .score-board span {
+            color: #ffd93d;
+            font-weight: bold;
+        }
+
+        .game-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            position: relative;
+        }
+
+        .game-canvas-wrap {
+            position: relative;
+            width: 480px;
+            max-width: 100%;
+            margin: 0 auto;
+        }
+        @media (max-width: 520px) {
+            .game-canvas-wrap {
+                width: 100%;
+                max-width: calc(100vw - 24px);
+            }
+        }
+        .game-canvas-wrap::before {
+            content: '';
+            display: block;
+            padding-top: 100%;
+        }
+        .game-canvas-wrap #gameCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .level-up-overlay {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            align-items: center;
+            justify-content: center;
+            z-index: 5;
+            pointer-events: none;
+        }
+        .level-up-overlay.show {
+            display: flex;
+            animation: levelUpFade 0.2s ease-out;
+        }
+        @keyframes levelUpFade {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .level-up-content {
+            display: flex;
+            align-items: baseline;
+            gap: 4px;
+            background: linear-gradient(145deg, #1b263b, #0d1b2a);
+            border: 3px solid #6bcf7f;
+            border-radius: 16px;
+            padding: 24px 48px;
+            box-shadow: 0 0 30px rgba(107, 207, 127, 0.4);
+        }
+        .level-up-label {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #6bcf7f;
+        }
+        .level-up-number {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #ffd93d;
+            line-height: 1;
+        }
+        .level-up-exclaim {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #ffd93d;
+        }
+
+        .game-canvas-wrap #gameCanvas {
+            border: 3px solid #6bcf7f;
+            border-radius: 10px;
+            background: #0d1b2a;
+            box-shadow: 0 0 30px rgba(107, 207, 127, 0.25);
+        }
+
+        .controls-section {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .controls-label { font-size: 1.1rem; font-weight: bold; margin-bottom: 8px; color: #6bcf7f; }
+        .controls-text { font-size: 0.9rem; opacity: 0.8; line-height: 1.4; }
+        .mobile-hint { font-size: 0.8rem; color: #6bcf7f; margin-top: 10px; }
+
+        .food-legend {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 14px 18px;
+            margin-top: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            max-width: 500px;
+            width: 100%;
+        }
+        .food-legend-title {
+            font-size: 0.95rem;
+            font-weight: bold;
+            color: #6bcf7f;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .food-legend-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px 16px;
+            font-size: 0.8rem;
+            line-height: 1.3;
+        }
+        .food-legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .food-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            border: 2px solid rgba(255,255,255,0.4);
+        }
+        .food-dot--normal { background: #e85959; }
+        .food-dot--speed { background: #40c057; box-shadow: 0 0 8px #51cf66; }
+        .food-dot--bonus { background: #37b24d; box-shadow: 0 0 8px #40c057; }
+        .food-dot--slow { background: #fd7e14; box-shadow: 0 0 8px #ff922b; }
+        .food-dot--double { background: #2f9e44; box-shadow: 0 0 8px #37b24d; }
+        .food-dot--minus1 { background: #74c0fc; box-shadow: 0 0 8px #91d5ff; }
+        .food-dot--shrink { background: #339af0; box-shadow: 0 0 8px #4dabf7; }
+        .food-dot--minus3 { background: #1c7ed6; box-shadow: 0 0 8px #228be6; }
+
+        .mobile-controls {
+            display: none;
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-rows: 1fr 1fr 1fr;
+            gap: 10px;
+            max-width: 280px;
+            margin: 20px auto 0;
+        }
+        .mobile-controls.show { display: grid; }
+
+        .control-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            backdrop-filter: blur(10px);
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .control-btn:active, .control-btn.pressed {
+            background: rgba(107, 207, 127, 0.3);
+            border-color: #6bcf7f;
+            transform: scale(0.95);
+        }
+        .control-btn.up { grid-column: 2; grid-row: 1; }
+        .control-btn.left { grid-column: 1; grid-row: 2; }
+        .control-btn.down { grid-column: 2; grid-row: 3; }
+        .control-btn.right { grid-column: 3; grid-row: 2; }
+
+        .game-screen {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.85);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+        .game-screen.show { display: flex; }
+
+        .game-screen .content {
+            background: linear-gradient(145deg, #1b263b, #0d1b2a);
+            border: 3px solid #6bcf7f;
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            min-width: 320px;
+            max-width: 90vw;
+        }
+
+        .screen-title {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 16px;
+            background: linear-gradient(45deg, #6bcf7f, #4d9de0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .screen-description { font-size: 1.1rem; margin-bottom: 24px; opacity: 0.9; }
+        .screen-instructions { font-size: 0.95rem; margin-bottom: 24px; opacity: 0.7; line-height: 1.4; }
+
+        .game-button {
+            background: linear-gradient(45deg, #6bcf7f, #4dab5e);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: bold;
+            padding: 14px 28px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 8px;
+            box-shadow: 0 4px 15px rgba(107, 207, 127, 0.3);
+        }
+        .game-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(107, 207, 127, 0.4);
+        }
+        .game-button.secondary {
+            background: linear-gradient(45deg, #4d9de0, #6bcf7f);
+            box-shadow: 0 4px 15px rgba(77, 157, 224, 0.3);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin: 20px 0;
+            text-align: left;
+        }
+        .stat-item {
+            background: rgba(255, 255, 255, 0.08);
+            padding: 12px;
+            border-radius: 10px;
+            border-left: 4px solid #6bcf7f;
+        }
+        .stat-label { font-size: 0.85rem; opacity: 0.7; margin-bottom: 4px; }
+        .stat-value { font-size: 1.2rem; font-weight: bold; color: #6bcf7f; }
+
+        @media (max-width: 768px) {
+            body { padding: 10px; }
+            .header { flex-direction: column; gap: 16px; padding: 16px; }
+            .game-title { font-size: 1.6rem; }
+            .game-screen .content { padding: 28px 20px; min-width: 280px; }
+            .screen-title { font-size: 1.6rem; }
+            .food-legend { padding: 12px; margin: 12px 10px 0; }
+            .food-legend-grid { grid-template-columns: 1fr; font-size: 0.75rem; }
+            .level-up-overlay { width: 100%; max-width: 480px; height: auto; aspect-ratio: 1; }
+            .level-up-content { padding: 16px 32px; }
+            .level-up-label { font-size: 1.4rem; }
+            .level-up-number, .level-up-exclaim { font-size: 2.2rem; }
+        }
+    </style>
+</head>
+<body>
+    <a href="../index.html" class="back-btn" data-i18n="backToGameCenter">← 게임센터</a>
+
+    <div class="header">
+        <h1 class="game-title" data-i18n="gameTitle">🐍 스네이크 게임 🐍</h1>
+        <div class="score-board">
+            <div><span data-i18n="scoreLabel">점수</span>: <span id="scoreValue">0</span></div>
+            <div><span data-i18n="highScoreLabel">최고</span>: <span id="highScoreValue">0</span></div>
+            <div><span data-i18n="levelLabel">단계</span>: <span id="levelValue">1</span></div>
+        </div>
+    </div>
+
+    <div class="game-section">
+        <div class="game-canvas-wrap">
+            <canvas id="gameCanvas" width="480" height="480" aria-label="스네이크 게임"></canvas>
+            <div class="level-up-overlay" id="levelUpOverlay" aria-live="polite">
+                <div class="level-up-content">
+                    <span class="level-up-label" id="levelUpLabel">단계</span>
+                    <span class="level-up-number" id="levelUpNumber">2</span>
+                    <span class="level-up-exclaim" id="levelUpExclaim">!</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="controls-section">
+        <div class="controls-label" data-i18n="controlsLabel">조작법:</div>
+        <div class="controls-text" data-i18n="controlsText">방향키로 이동 | 스페이스바 일시정지 | R키 재시작</div>
+        <div class="mobile-hint" data-i18n="mobileHint">모바일: 화면 버튼으로 방향 조작</div>
+    </div>
+
+    <div class="food-legend">
+        <div class="food-legend-title" data-i18n="foodLegendTitle">볼 종류</div>
+        <div class="food-legend-grid">
+            <div class="food-legend-item">
+                <span class="food-dot food-dot--normal" aria-hidden="true"></span>
+                <span data-i18n="foodNormal">일반: 점수+10, 길이+1</span>
+            </div>
+            <div class="food-legend-item">
+                <span class="food-dot food-dot--speed" aria-hidden="true"></span>
+                <span data-i18n="foodSpeed">속도: 점수+15, 속도 업</span>
+            </div>
+            <div class="food-legend-item">
+                <span class="food-dot food-dot--bonus" aria-hidden="true"></span>
+                <span data-i18n="foodBonus">보너스: 점수+30, 길이+2</span>
+            </div>
+            <div class="food-legend-item">
+                <span class="food-dot food-dot--slow" aria-hidden="true"></span>
+                <span data-i18n="foodSlow">감속: 점수+20, 잠시 느려짐</span>
+            </div>
+            <div class="food-legend-item">
+                <span class="food-dot food-dot--double" aria-hidden="true"></span>
+                <span data-i18n="foodDouble">더블: 점수+25, 길이+2</span>
+            </div>
+            <div class="food-legend-item">
+                <span class="food-dot food-dot--minus1" aria-hidden="true"></span>
+                <span data-i18n="foodMinus1">꼬리-1: 점수+8</span>
+            </div>
+            <div class="food-legend-item">
+                <span class="food-dot food-dot--shrink" aria-hidden="true"></span>
+                <span data-i18n="foodShrink">꼬리-2: 점수+15</span>
+            </div>
+            <div class="food-legend-item">
+                <span class="food-dot food-dot--minus3" aria-hidden="true"></span>
+                <span data-i18n="foodMinus3">꼬리-3: 점수+25</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="mobile-controls" id="mobile-controls">
+        <div class="control-btn up" data-key="ArrowUp">↑</div>
+        <div class="control-btn left" data-key="ArrowLeft">←</div>
+        <div class="control-btn down" data-key="ArrowDown">↓</div>
+        <div class="control-btn right" data-key="ArrowRight">→</div>
+    </div>
+
+    <div class="game-screen show" id="startScreen">
+        <div class="content">
+            <h2 class="screen-title" data-i18n="startTitle">🐍 스네이크 🐍</h2>
+            <p class="screen-description" data-i18n="startDescription">먹이를 먹을수록 뱀이 길어져요!</p>
+            <p class="screen-instructions" data-i18n="startInstructions">벽이나 자신의 몸에 부딪히지 마세요.</p>
+            <button type="button" class="game-button" id="startGameBtn" data-i18n="gameStartButton">게임 시작</button>
+        </div>
+    </div>
+
+    <div class="game-screen" id="gameOverScreen">
+        <div class="content">
+            <h2 class="screen-title" data-i18n="gameOverTitle">게임 종료</h2>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-label" data-i18n="finalScore">최종 점수</div>
+                    <div class="stat-value" id="finalScore">0</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label" data-i18n="bestScore">최고 점수</div>
+                    <div class="stat-value" id="bestScore">0</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label" data-i18n="levelReached">도달 단계</div>
+                    <div class="stat-value" id="levelReached">1</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label" data-i18n="length">뱀 길이</div>
+                    <div class="stat-value" id="lengthValue">0</div>
+                </div>
+            </div>
+            <button type="button" class="game-button" data-i18n="restartButton">다시 시작</button>
+            <button type="button" class="game-button secondary" data-i18n="backToMenu">메뉴로</button>
+        </div>
+    </div>
+
+    <div class="game-screen" id="pauseScreen">
+        <div class="content">
+            <h2 class="screen-title" data-i18n="paused">일시정지</h2>
+            <p class="screen-description" data-i18n="pressSpaceToResume">스페이스바를 눌러 계속하기</p>
+            <button type="button" class="game-button" data-i18n="resumeButton">계속하기</button>
+            <button type="button" class="game-button secondary" data-i18n="backToMenu">메뉴로</button>
+        </div>
+    </div>
+
+    <script src="/snake/game.js"></script>
+    <script>
+        function isMobile() { return window.innerWidth <= 768 || 'ontouchstart' in window; }
+        if (isMobile()) document.getElementById('mobile-controls').classList.add('show');
+        window.addEventListener('resize', function() {
+            document.getElementById('mobile-controls').classList.toggle('show', isMobile());
+        });
+    </script>
+</body>
+</html>
